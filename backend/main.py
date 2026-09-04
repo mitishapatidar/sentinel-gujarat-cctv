@@ -288,8 +288,10 @@ def get_vehicle_trajectory(plate_number: str, db: Session = Depends(get_db)):
         )
 
     trajectory = []
+    last_cam_id = None
     for det in detections:
-        if det.camera:
+        if det.camera and det.camera.id != last_cam_id:
+            last_cam_id = det.camera.id
             trajectory.append(TrajectoryPoint(
                 detection_id=det.id,
                 camera_id=det.camera.id,
@@ -481,7 +483,6 @@ async def periodic_simulation_loop():
                 cameras = db.query(Camera).all()
                 watchlist_records = db.query(Watchlist).all()
                 if cameras and watchlist_records:
-                    cam = random.choice(cameras)
                     watchlist_dicts = [
                         {
                             "id": w.id,
@@ -493,15 +494,24 @@ async def periodic_simulation_loop():
                         for w in watchlist_records
                     ]
 
-                    # 65% chance of generating a hotlist vehicle (or OCR typo)
-                    if random.random() < 0.65:
+                    # Realistic highway corridors for each target
+                    SUSPECT_CORRIDORS = {
+                        "GJ01AB1234": [4, 3, 2, 7, 27],
+                        "GJ06XX9999": [19, 2, 8, 7, 29],
+                        "GJ27CD5678": [6, 10, 16],
+                        "GJ05EF9012": [40, 41, 42],
+                    }
+
+                    # 35% chance of generating a hotlist vehicle sighting along its corridor
+                    if random.random() < 0.35:
                         chosen = random.choice(watchlist_dicts)
                         raw_plate = chosen["plate_number"]
-                        if random.random() < 0.30:
-                            simulated_plate = raw_plate.replace("B", "8") if "B" in raw_plate else f"{raw_plate[:-1]}4"
-                        else:
-                            simulated_plate = raw_plate
+                        corridor_cam_ids = SUSPECT_CORRIDORS.get(raw_plate, [c.id for c in cameras])
+                        cam_id = random.choice(corridor_cam_ids)
+                        cam = next((c for c in cameras if c.id == cam_id), random.choice(cameras))
+                        simulated_plate = raw_plate
                     else:
+                        cam = random.choice(cameras)
                         simulated_plate = f"GJ0{random.randint(1, 9)}{chr(random.randint(65, 90))}{chr(random.randint(65, 90))}{random.randint(1000, 9999)}"
 
                     is_match, matched_item, similarity = match_against_watchlist(simulated_plate, watchlist_dicts, threshold=0.80)

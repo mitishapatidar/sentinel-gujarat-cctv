@@ -103,6 +103,14 @@ def seed_database():
                 "crime_type": "Wanted Suspect",
                 "alert_level": "High",
                 "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=2)
+            },
+            {
+                "id": 4,
+                "plate_number": "GJ06XX9999",
+                "vehicle_model": "Red Hyundai Creta SX",
+                "crime_type": "Kidnapping Suspect",
+                "alert_level": "Critical",
+                "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=2)
             }
         ]
 
@@ -110,67 +118,32 @@ def seed_database():
             db.add(Watchlist(**wl))
         db.commit()
 
-        print("[INFO] Seeding 5 Historical Detection Records for 'GJ01AB1234' across 4+ cameras...")
+        print("[INFO] Seeding clean, chronological route detections for suspect vehicles...")
         now = datetime.datetime.now(datetime.timezone.utc)
-        # 5 chronological detection logs across cameras: 4 -> 3 -> 2 -> 7 -> 27 (Infocity)
         detections_data = [
-            {
-                "camera_id": 4,  # Kalupur Railway Station
-                "plate_number": "GJ01AB1234",
-                "timestamp": now - datetime.timedelta(minutes=105),
-                "is_alert": True,
-                "confidence": 0.97,
-                "matched_watchlist_id": 1
-            },
-            {
-                "camera_id": 3,  # Ashram Road - Income Tax Circle
-                "plate_number": "GJ01AB1234",
-                "timestamp": now - datetime.timedelta(minutes=80),
-                "is_alert": True,
-                "confidence": 0.95,
-                "matched_watchlist_id": 1
-            },
-            {
-                "camera_id": 2,  # SG Highway - Pakwan Cross Road
-                "plate_number": "GJ01AB1234",
-                "timestamp": now - datetime.timedelta(minutes=52),
-                "is_alert": True,
-                "confidence": 0.98,
-                "matched_watchlist_id": 1
-            },
-            {
-                "camera_id": 7,  # SP Ring Road - Vaishnodevi Circle
-                "plate_number": "GJ01AB1234",
-                "timestamp": now - datetime.timedelta(minutes=28),
-                "is_alert": True,
-                "confidence": 0.96,
-                "matched_watchlist_id": 1
-            },
-            {
-                "camera_id": 27, # Infocity IT Tower Junction
-                "plate_number": "GJ01AB1234",
-                "timestamp": now - datetime.timedelta(minutes=8),
-                "is_alert": True,
-                "confidence": 0.99,
-                "matched_watchlist_id": 1
-            },
-            # Detections for other watchlist targets
-            {
-                "camera_id": 6,  # Narol Circle
-                "plate_number": "GJ27CD5678",
-                "timestamp": now - datetime.timedelta(minutes=18),
-                "is_alert": True,
-                "confidence": 0.94,
-                "matched_watchlist_id": 2
-            },
-            {
-                "camera_id": 42, # Surat Kamrej Toll Plaza
-                "plate_number": "GJ05EF9012",
-                "timestamp": now - datetime.timedelta(minutes=5),
-                "is_alert": True,
-                "confidence": 0.93,
-                "matched_watchlist_id": 3
-            }
+            # 1. GJ01AB1234 (Kalupur Heist route -> Gandhinagar Infocity)
+            {"camera_id": 4,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=105), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 1},
+            {"camera_id": 3,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=80),  "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 1},
+            {"camera_id": 2,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=52),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 1},
+            {"camera_id": 7,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=28),  "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 1},
+            {"camera_id": 27, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=8),   "is_alert": True, "confidence": 0.99, "matched_watchlist_id": 1},
+
+            # 2. GJ06XX9999 (Amber Alert Kidnapping: Vastrapur -> Pakwan -> Gota -> Vaishnodevi -> CH-0)
+            {"camera_id": 19, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=55), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 4},
+            {"camera_id": 2,  "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=38), "is_alert": True, "confidence": 0.99, "matched_watchlist_id": 4},
+            {"camera_id": 8,  "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=22), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 4},
+            {"camera_id": 7,  "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=9),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 4},
+            {"camera_id": 29, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=2),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 4},
+
+            # 3. GJ27CD5678 (Hit-and-Run Scorpio: Narol -> Sarkhej -> South Bopal)
+            {"camera_id": 6,  "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=45), "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 2},
+            {"camera_id": 10, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=26), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 2},
+            {"camera_id": 16, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=10), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 2},
+
+            # 4. GJ05EF9012 (Stolen Fortuner: Surat Textile -> Athwa Gate -> Kamrej Toll NH-48)
+            {"camera_id": 40, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=60), "is_alert": True, "confidence": 0.92, "matched_watchlist_id": 3},
+            {"camera_id": 41, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=35), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 3},
+            {"camera_id": 42, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=12), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 3},
         ]
 
         for det in detections_data:
