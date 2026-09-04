@@ -55,13 +55,13 @@ export const LiveAlertFeed: React.FC<LiveAlertFeedProps> = ({
             <div className="text-[10px] text-slate-600">Monitoring 50+ statewide feeds in real-time...</div>
           </div>
         ) : (
-          alerts.map((alert) => {
+          alerts.map((alert, idx) => {
             const isCritical = alert.alert_level?.toUpperCase() === 'CRITICAL';
             const isHigh = alert.alert_level?.toUpperCase() === 'HIGH';
 
             return (
               <div
-                key={alert.id}
+                key={`alert-${alert.id}-${idx}-${alert.timestamp}`}
                 className={`p-3 rounded-lg border transition-all relative overflow-hidden ${
                   isCritical
                     ? 'border-red-600/70 bg-red-950/20 hover:bg-red-950/30'

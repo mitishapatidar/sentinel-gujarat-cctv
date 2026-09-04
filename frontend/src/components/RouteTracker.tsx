@@ -130,9 +130,9 @@ export const RouteTracker: React.FC<RouteTrackerProps> = ({
             Active Watchlist Targets (Click to Track):
           </div>
           <div className="grid grid-cols-3 gap-2">
-            {watchlist.map((item) => (
+            {watchlist.map((item, idx) => (
               <button
-                key={item.id}
+                key={`wl-${item.id}-${item.plate_number}-${idx}`}
                 onClick={() => handleSelectQuickVehicle(item.plate_number)}
                 className={`p-2 rounded-lg border text-left transition-all ${
                   searchedPlate === item.plate_number
@@ -179,7 +179,7 @@ export const RouteTracker: React.FC<RouteTrackerProps> = ({
 
             <div className="relative pl-6 space-y-2.5 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-red-500 before:to-amber-500">
               {trajectory.map((point, idx) => (
-                <div key={point.detection_id} className="relative group">
+                <div key={`track-node-${point.detection_id}-${idx}`} className="relative group">
                   <div className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-slate-900 border-2 border-red-500 flex items-center justify-center text-[9px] font-mono font-bold text-red-400">
                     {idx + 1}
                   </div>

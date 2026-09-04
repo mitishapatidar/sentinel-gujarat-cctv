@@ -197,7 +197,10 @@ export default function CommandCenter() {
               snapshot: data.snapshot,
             };
 
-            setAlerts((prev) => [newAlert, ...prev.slice(0, 9)]);
+            setAlerts((prev) => {
+              const filtered = prev.filter((a) => a.id !== newAlert.id);
+              return [newAlert, ...filtered.slice(0, 9)];
+            });
             setLatestAlertCameraId(data.camera_id);
             playAlertSound();
 

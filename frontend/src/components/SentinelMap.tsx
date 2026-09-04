@@ -187,7 +187,7 @@ export const SentinelMap: React.FC<SentinelMapProps> = ({
           {/* Numbered Waypoint Markers on Trajectory */}
           {trajectory.map((point, idx) => (
             <Marker
-              key={`waypoint-${point.detection_id}`}
+              key={`waypoint-${point.detection_id}-${idx}`}
               position={[point.lat, point.lng]}
               icon={createWaypointIcon(idx)}
             >
@@ -214,13 +214,13 @@ export const SentinelMap: React.FC<SentinelMapProps> = ({
           ))}
 
           {/* Statewide Camera Registry Pins */}
-          {cameras.map((cam) => {
+          {cameras.map((cam, idx) => {
             const isAlerted = latestAlertCameraId === cam.id || cam.recent_alert;
             const isSelected = selectedCamera?.id === cam.id;
 
             return (
               <Marker
-                key={`cam-${cam.id}`}
+                key={`cam-${cam.id}-${idx}`}
                 position={[cam.lat, cam.lng]}
                 icon={createCameraIcon(cam, Boolean(isAlerted), isSelected)}
                 eventHandlers={{
