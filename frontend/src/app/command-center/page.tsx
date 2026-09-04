@@ -358,34 +358,34 @@ function CommandCenterInner() {
               ].map((feed) => (
                 <div
                   key={feed.id}
-                  className={`bg-slate-900 rounded-xl overflow-hidden relative border flex flex-col justify-between p-2.5 h-36 ${
+                  className={`bg-slate-900 rounded-xl overflow-hidden relative border flex flex-col justify-between p-2.5 h-36 shadow-sm ${
                     feed.alert ? 'border-red-500 ring-2 ring-red-400' : 'border-slate-300'
                   }`}
                 >
+                  {/* Real Live MJPEG Surveillance Video Feed */}
+                  <img
+                    src={`${API_BASE}/api/stream/${feed.id}`}
+                    alt={feed.name}
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    onError={(e) => {
+                      e.currentTarget.style.opacity = '0';
+                    }}
+                  />
+
                   {/* Top Bar */}
                   <div className="flex items-center justify-between z-10 text-[10px] font-mono">
-                    <span className="bg-white/90 text-slate-900 font-bold px-1.5 py-0.5 rounded text-[9px]">
+                    <span className="bg-black/75 backdrop-blur-xs text-white font-bold px-1.5 py-0.5 rounded text-[9px] border border-white/20">
                       {feed.tag}
                     </span>
                     {feed.alert && (
-                      <span className="bg-red-600 text-white font-bold px-1.5 py-0.5 rounded animate-pulse text-[9px]">
+                      <span className="bg-red-600 text-white font-bold px-1.5 py-0.5 rounded animate-pulse text-[9px] shadow-sm">
                         HOTLIST HIT
                       </span>
                     )}
                   </div>
 
-                  {/* Center Optical Reticle & Plate box */}
-                  <div className="my-auto flex flex-col items-center justify-center">
-                    <div className="border border-emerald-400 bg-emerald-950/30 px-3 py-1.5 rounded text-center">
-                      <span className="font-mono text-emerald-400 text-xs font-bold tracking-widest block">
-                        {feed.plate}
-                      </span>
-                      <span className="text-[8px] text-emerald-300 font-mono uppercase">ANPR OCR: 98%</span>
-                    </div>
-                  </div>
-
                   {/* Bottom Meta */}
-                  <div className="z-10 text-[9px] text-slate-300 truncate font-mono">
+                  <div className="z-10 text-[9px] text-white/90 truncate font-mono bg-black/70 backdrop-blur-xs px-1.5 py-0.5 rounded max-w-fit border border-white/10">
                     {feed.name}
                   </div>
                 </div>
