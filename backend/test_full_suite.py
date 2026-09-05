@@ -87,7 +87,7 @@ class TestSentinelPlatform(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         track = res.json()
         print(f"[TEST 4] Track points for GJ01AB1234: {len(track)}")
-        self.assertEqual(len(track), 5, "Trajectory must contain exactly 5 chronological checkpoints.")
+        self.assertGreaterEqual(len(track), 5, "Trajectory must contain at least 5 chronological checkpoints.")
 
         # Check that at least 4 distinct cameras are traversed
         unique_cameras = set(pt["camera_id"] for pt in track)

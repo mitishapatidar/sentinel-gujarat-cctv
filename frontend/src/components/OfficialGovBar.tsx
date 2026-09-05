@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Shield, Lock, Radio, Clock, UserCheck, AlertTriangle, LogOut, Layers, LayoutDashboard, FileText, Bell } from 'lucide-react';
+import { Shield, Lock, Radio, Clock, UserCheck, AlertTriangle, LogOut, Layers, LayoutDashboard, FileText, Bell, Route, Cpu } from 'lucide-react';
 
 interface OfficialGovBarProps {
   activeAlertsCount?: number;
@@ -45,6 +45,9 @@ export const OfficialGovBar: React.FC<OfficialGovBarProps> = ({ activeAlertsCoun
   const navLinks = [
     { href: '/departments', label: 'Integration Status', icon: Layers },
     { href: '/command-center', label: 'Command & Control', icon: LayoutDashboard },
+    { href: '/anomalies', label: 'Behavioral Anomalies', icon: AlertTriangle },
+    { href: '/trail', label: 'Trail Forensic', icon: Route },
+    { href: '/edge-triage', label: '80K Edge Triage Proof', icon: Cpu },
     { href: '/cases', label: 'Crime Hotlist', icon: FileText },
   ];
 

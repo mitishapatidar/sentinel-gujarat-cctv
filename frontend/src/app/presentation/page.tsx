@@ -222,12 +222,12 @@ export default function PresentationPage() {
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex flex-col justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-[#1E3A8A] block mb-1">PILLAR 01</span>
-                  <h3 className="text-xs font-bold text-slate-900">Unified Ingestion</h3>
+                  <h3 className="text-xs font-bold text-slate-900">Edge Triage Ingestion</h3>
                   <p className="text-[11px] text-slate-500 mt-2 leading-tight">
-                    Ingests RTSP, WebRTC, and HLS across 80,000+ cameras statewide under a single glass pane.
+                    Edge NPUs federate 80,000+ cameras with 500× bandwidth cut (320 Mbps vs 160 Gbps) and on-demand stream pull.
                   </p>
                 </div>
-                <div className="text-[10px] font-mono text-[#1E3A8A] font-bold mt-4">80,000+ Nodes</div>
+                <div className="text-[10px] font-mono text-[#1E3A8A] font-bold mt-4">500× WAN Savings</div>
               </div>
 
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex flex-col justify-between">
@@ -280,12 +280,12 @@ export default function PresentationPage() {
 
             <div className="grid grid-cols-4 gap-3 my-2">
               <div className="bg-blue-50/50 border border-blue-200 rounded-xl p-3 space-y-1.5">
-                <div className="text-xs font-bold text-[#1E3A8A]">1. Ingestion Layer</div>
+                <div className="text-xs font-bold text-[#1E3A8A]">1. Edge Triage Layer</div>
                 <ul className="text-[11px] text-slate-600 space-y-1">
-                  <li>• RTSP/RTP (Port 8554)</li>
-                  <li>• WebRTC WHEP (Port 8889)</li>
-                  <li>• 30 FPS MJPEG Engine</li>
-                  <li>• Protocol Transcoder</li>
+                  <li>• Jetson / Hailo-8 NPU</li>
+                  <li>• 4 Kbps JSON Telemetry</li>
+                  <li>• 500× Bandwidth Savings</li>
+                  <li>• Pull-on-Demand Video</li>
                 </ul>
               </div>
 
@@ -321,7 +321,7 @@ export default function PresentationPage() {
             </div>
 
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-center text-xs font-bold text-[#1E3A8A]">
-              DATA PIPELINE: Camera Stream ➔ Optical ANPR (&lt;30ms) ➔ Hotlist Match ➔ WebSocket Push (&lt;10ms) ➔ Map Trajectory ➔ PCR & Toll Barricade
+              EDGE-TO-COMMAND PIPELINE: Edge AI Triage (4 Kbps) ➔ Optical ANPR (&lt;30ms) ➔ Hotlist Match ➔ WebSocket Push (&lt;10ms) ➔ On-Demand Stream Pull (320 Mbps Statewide Grid)
             </div>
 
             <div className="text-[11px] text-slate-400 font-mono text-right">Slide 05 • System Architecture</div>
@@ -370,6 +370,10 @@ export default function PresentationPage() {
                   <p className="text-[11px] text-slate-500">Matches plates against active SCRB hotlists even with 1–2 occluded digits, triggering real-time Amber Alerts instantly.</p>
                 </div>
               </div>
+            </div>
+
+            <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-2.5 text-center text-[11px] font-bold text-[#1E3A8A]">
+              MULTI-MODAL BEHAVIORAL AI: Wrong-Way Optical Flow (NE-1/SG Hwy) • After-Hours ATM Loitering (&gt;5m dwell) • Crowd Panic Surge (RPF QRT) • Triple Riding &amp; No-Helmet e-Challan
             </div>
 
             <div className="text-[11px] text-slate-400 font-mono text-right">Slide 06 • AI & Vision Pipeline</div>
@@ -434,8 +438,8 @@ export default function PresentationPage() {
             <div className="absolute top-0 inset-x-0 h-1 bg-[#1E3A8A]" />
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#1E3A8A]">Tactical Action</span>
-              <h2 className="text-2xl font-black text-slate-900 font-serif">Predictive Toll Interception & Dispatch</h2>
-              <p className="text-xs text-slate-500">Transforming passive CCTV observation into proactive police apprehension</p>
+              <h2 className="text-2xl font-black text-slate-900 font-serif">Predictive Interception & Multi-Modal Countermeasures</h2>
+              <p className="text-xs text-slate-500">Proactive highway toll locks, 110dB ATM audio sirens, QRT mobilization, and automated e-Challans</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 my-2">
@@ -576,46 +580,64 @@ export default function PresentationPage() {
           </div>
         </section>
 
-        {/* SLIDE 11: SCALABILITY */}
+        {/* SLIDE 11: SCALABILITY & BANDWIDTH PROOF */}
         <section className={`slide-page ${currentSlide === 11 ? 'block' : 'hidden print:block'}`}>
           <div className="w-[1000px] h-[562px] bg-white border border-slate-200 rounded-2xl shadow-md p-8 flex flex-col justify-between relative overflow-hidden print:border-0 print:shadow-none">
             <div className="absolute top-0 inset-x-0 h-1 bg-[#1E3A8A]" />
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#1E3A8A]">Scalability</span>
-              <h2 className="text-2xl font-black text-slate-900 font-serif">Statewide Rollout & Performance Benchmarks</h2>
-              <p className="text-xs text-slate-500">Engineered to scale seamlessly across all 33 districts of Gujarat State</p>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#1E3A8A]">Scalability & Bandwidth Proof</span>
+              <h2 className="text-2xl font-black text-slate-900 font-serif">Statewide 80,000-Camera Edge Triage Proof</h2>
+              <p className="text-xs text-slate-500">The mathematical proof preventing Gujarat State WAN collapse: 160 Gbps vs 320 Mbps (500× Savings)</p>
             </div>
 
-            <div className="grid grid-cols-4 gap-3 my-2">
-              <div className="bg-emerald-50/50 border border-emerald-200 rounded-xl p-3 text-center">
-                <div className="text-2xl font-black text-emerald-700 font-mono">&lt;50ms</div>
-                <div className="text-[10px] font-bold text-slate-700 mt-1">ANPR Inference Latency</div>
+            <div className="grid grid-cols-4 gap-3 my-1.5">
+              <div className="bg-emerald-50/50 border border-emerald-200 rounded-xl p-2.5 text-center">
+                <div className="text-xl font-black text-emerald-700 font-mono">&lt;50ms</div>
+                <div className="text-[10px] font-bold text-slate-700 mt-0.5">Edge ANPR Latency</div>
               </div>
 
-              <div className="bg-blue-50/50 border border-blue-200 rounded-xl p-3 text-center">
-                <div className="text-2xl font-black text-[#1E3A8A] font-mono">30 FPS</div>
-                <div className="text-[10px] font-bold text-slate-700 mt-1">MJPEG Surveillance Stream</div>
+              <div className="bg-red-50/50 border border-red-200 rounded-xl p-2.5 text-center">
+                <div className="text-xl font-black text-red-600 font-mono">160 Gbps</div>
+                <div className="text-[10px] font-bold text-slate-700 mt-0.5">Central Cloud (WAN Crash)</div>
               </div>
 
-              <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-3 text-center">
-                <div className="text-2xl font-black text-amber-700 font-mono">80,000+</div>
-                <div className="text-[10px] font-bold text-slate-700 mt-1">Camera Grid Capacity</div>
+              <div className="bg-blue-50/50 border border-blue-200 rounded-xl p-2.5 text-center">
+                <div className="text-xl font-black text-[#1E3A8A] font-mono">320 Mbps</div>
+                <div className="text-[10px] font-bold text-slate-700 mt-0.5">SENTINEL Edge Triage</div>
               </div>
 
-              <div className="bg-purple-50/50 border border-purple-200 rounded-xl p-3 text-center">
-                <div className="text-2xl font-black text-purple-700 font-mono">98.4%</div>
-                <div className="text-[10px] font-bold text-slate-700 mt-1">Plate Match Accuracy</div>
+              <div className="bg-purple-50/50 border border-purple-200 rounded-xl p-2.5 text-center">
+                <div className="text-xl font-black text-purple-700 font-mono">500×</div>
+                <div className="text-[10px] font-bold text-slate-700 mt-0.5">Bandwidth Reduction</div>
               </div>
             </div>
 
-            <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3.5 space-y-1 text-xs">
-              <span className="font-bold text-[#1E3A8A] uppercase tracking-wider block text-[10px]">Phased Deployment Plan</span>
-              <p className="text-slate-700">• <strong>Phase 1 (Live Pilot - Complete):</strong> Ahmedabad & Gandhinagar SG Highway (52 Active Nodes, 4 Live Video Feeds, 8 Active Hotlist Cases).</p>
-              <p className="text-slate-700">• <strong>Phase 2 (Metropolitan - Q3 2026):</strong> Surat Municipal Corp, Vadodara Smart City, and NE-1 National Expressway Toll Plazas.</p>
-              <p className="text-slate-700">• <strong>Phase 3 (Statewide - Q1 2027):</strong> Saurashtra (Rajkot, Bhavnagar) and Kutch border security checkpoints (80,000+ nodes).</p>
+            <div className="grid grid-cols-2 gap-3 my-1">
+              <div className="bg-red-50/40 border border-red-200 rounded-xl p-3 space-y-1">
+                <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider block">Disqualification Trap: Central Cloud Ingest</span>
+                <p className="text-[11px] text-slate-700 leading-tight">
+                  80,000 × 2 Mbps = <strong>160 Gbps</strong> raw video upload. Exceeds GSWAN capacity by 1,600%, costing ₹14.19 Cr/month in bandwidth egress and dropping frames under packet loss.
+                </p>
+              </div>
+              <div className="bg-emerald-50/40 border border-emerald-200 rounded-xl p-3 space-y-1">
+                <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">Winning Architecture: SENTINEL Edge Triage</span>
+                <p className="text-[11px] text-slate-700 leading-tight">
+                  80,000 × 4 Kbps = <strong>320 Mbps</strong> structured JSON telemetry + thumbnails. High-def RTSP/WebRTC streams pulled <strong>strictly on-demand</strong> during active incidents.
+                </p>
+              </div>
             </div>
 
-            <div className="text-[11px] text-slate-400 font-mono text-right">Slide 11 • Scalability & Rollout</div>
+            <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3 space-y-1 text-xs">
+              <span className="font-bold text-[#1E3A8A] uppercase tracking-wider block text-[10px]">Edge Appliance Hardware Topology & Phased Rollout</span>
+              <p className="text-slate-700 leading-tight">
+                • <strong>Hardware:</strong> NVIDIA Jetson Orin Nano (40 TOPS @ 7–15W) / Raspberry Pi 5 + Hailo-8 NPU (26 TOPS @ ₹16,500) processing 8–16 junction feeds locally.
+              </p>
+              <p className="text-slate-700 leading-tight">
+                • <strong>Topology:</strong> 5,000 to 10,000 edge nodes at police stations/toll nakas. Video streamed only on operator click; 99.98% of feeds operate on zero-bandwidth telemetry mode.
+              </p>
+            </div>
+
+            <div className="text-[11px] text-slate-400 font-mono text-right">Slide 11 • Edge Triage & Bandwidth Proof</div>
           </div>
         </section>
 

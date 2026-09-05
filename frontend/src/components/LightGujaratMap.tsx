@@ -50,33 +50,75 @@ export const LightGujaratMap: React.FC<LightGujaratMapProps> = ({
     return trajectory.map((point) => [point.lat, point.lng]);
   }, [trajectory]);
 
-  // Clean Circular SVG Pin
+  // Clean Circular SVG Pin with OneFeed Health & Tamper State
   const createCameraIcon = (cam: Camera, isAlert: boolean, isSelected: boolean) => {
-    const html = isAlert
-      ? `
-        <div class="relative flex items-center justify-center w-7 h-7 cursor-pointer">
-          <div class="absolute w-7 h-7 rounded-full bg-red-500/40 beacon-ping"></div>
-          <div class="relative z-10 flex items-center justify-center w-5 h-5 rounded-full bg-[#DC2626] border-2 border-white shadow-lg text-white">
-            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+    if (isAlert) {
+      return L.divIcon({
+        html: `
+          <div class="relative flex items-center justify-center w-7 h-7 cursor-pointer">
+            <div class="absolute w-7 h-7 rounded-full bg-red-500/40 beacon-ping"></div>
+            <div class="relative z-10 flex items-center justify-center w-5 h-5 rounded-full bg-[#DC2626] border-2 border-white shadow-lg text-white font-bold text-[10px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+            </div>
           </div>
-        </div>
-      `
-      : `
-        <div class="relative flex items-center justify-center w-6 h-6 cursor-pointer">
-          <div class="relative z-10 flex items-center justify-center w-4 h-4 rounded-full ${
-            isSelected ? 'bg-amber-500 ring-2 ring-amber-300' : 'bg-[#1E3A8A]'
-          } border-2 border-white shadow-md">
-            <span class="w-1 h-1 rounded-full bg-white"></span>
+        `,
+        className: 'light-cam-pin',
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
+      });
+    }
+
+    if (cam.health_status === 'TAMPERED_OCCLUDED' || cam.tamper_alert) {
+      return L.divIcon({
+        html: `
+          <div class="relative flex items-center justify-center w-7 h-7 cursor-pointer">
+            <div class="absolute w-7 h-7 rounded-full bg-amber-500/40 beacon-ping"></div>
+            <div class="relative z-10 flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 border-2 border-white shadow-lg text-white font-black text-[10px]">
+              !
+            </div>
           </div>
+        `,
+        className: 'light-cam-pin',
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
+      });
+    }
+
+    if (cam.health_status === 'OFFLINE_TIMEOUT' || cam.health_status === 'VIDEO_LOSS') {
+      return L.divIcon({
+        html: `
+          <div class="relative flex items-center justify-center w-6 h-6 cursor-pointer opacity-85">
+            <div class="relative z-10 flex items-center justify-center w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md text-white font-black text-[9px]">
+              ✕
+            </div>
+          </div>
+        `,
+        className: 'light-cam-pin',
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+        popupAnchor: [0, -12],
+      });
+    }
+
+    // Default ONLINE camera pin
+    const html = `
+      <div class="relative flex items-center justify-center w-6 h-6 cursor-pointer">
+        <div class="relative z-10 flex items-center justify-center w-4 h-4 rounded-full ${
+          isSelected ? 'bg-amber-500 ring-2 ring-amber-300' : 'bg-[#1E3A8A]'
+        } border-2 border-white shadow-md">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         </div>
-      `;
+      </div>
+    `;
 
     return L.divIcon({
       html,
       className: 'light-cam-pin',
-      iconSize: [28, 28],
-      iconAnchor: [14, 14],
-      popupAnchor: [0, -14],
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -12],
     });
   };
 
@@ -164,6 +206,8 @@ export const LightGujaratMap: React.FC<LightGujaratMapProps> = ({
         {cameras.map((cam, idx) => {
           const isAlerted = latestAlertCameraId === cam.id || cam.recent_alert;
           const isSelected = selectedCamera?.id === cam.id;
+          const isTampered = cam.health_status === 'TAMPERED_OCCLUDED' || cam.tamper_alert;
+          const isOffline = cam.health_status === 'OFFLINE_TIMEOUT' || cam.health_status === 'VIDEO_LOSS';
 
           return (
             <Marker
@@ -175,29 +219,58 @@ export const LightGujaratMap: React.FC<LightGujaratMapProps> = ({
               }}
             >
               <Popup>
-                <div className="p-2 text-xs space-y-1.5 min-w-[200px]">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                    <span className="font-bold text-slate-900">{cam.name}</span>
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-[#1E3A8A]">
+                <div className="p-2.5 text-xs space-y-2 min-w-[240px]">
+                  {/* Header with Department & Jurisdiction */}
+                  <div className="flex items-start justify-between border-b border-slate-100 pb-1.5">
+                    <div>
+                      <div className="font-bold text-slate-900 leading-tight">{cam.name}</div>
+                      <div className="text-[10px] text-slate-500 font-mono">{cam.city || 'Gujarat'} • Node #{cam.id}</div>
+                    </div>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-[#1E3A8A] shrink-0 border border-blue-200">
                       {cam.department}
                     </span>
                   </div>
-                  <div className="text-slate-500 text-[11px] font-mono">
-                    Jurisdiction: {cam.city || 'Gujarat'}
+
+                  {/* OneFeed Multi-Vendor Ingestion Metadata */}
+                  <div className="bg-slate-50 rounded-lg p-2 border border-slate-200 space-y-1 text-[11px] font-mono">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">VMS Platform:</span>
+                      <span className="font-bold text-slate-800">{cam.vendor || 'Standard IP VMS'}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Protocol Adapter:</span>
+                      <span className="font-bold text-[#1E3A8A] bg-blue-50/80 px-1 rounded">{cam.protocol || 'ONVIF Profile T'}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500">Stream Telemetry:</span>
+                      <span className="text-slate-700">{cam.resolution || '1080p Full HD'} @ {cam.fps || 30} FPS</span>
+                    </div>
                   </div>
-                  <div className="text-slate-500 text-[11px] font-mono">
-                    GPS: {cam.lat.toFixed(4)}°N, {cam.lng.toFixed(4)}°E
-                  </div>
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-emerald-700 font-semibold text-[11px] flex items-center space-x-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                      <span>{cam.status.toUpperCase()}</span>
-                    </span>
+
+                  {/* Automated Health Status Badge */}
+                  <div className="flex items-center justify-between pt-0.5">
+                    {isTampered ? (
+                      <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+                        <span>TAMPER: LENS OCCLUDED</span>
+                      </span>
+                    ) : isOffline ? (
+                      <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-800 border border-red-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
+                        <span>{cam.health_status === 'VIDEO_LOSS' ? 'VIDEO LOSS' : 'OFFLINE (TIMEOUT)'}</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                        <span>ONLINE (ACTIVE)</span>
+                      </span>
+                    )}
+
                     <button
                       onClick={() => onSelectCamera(cam)}
-                      className="px-2 py-0.5 bg-[#1E3A8A] text-white rounded text-[10px] font-medium hover:bg-[#193073]"
+                      className="px-2.5 py-1 bg-[#1E3A8A] text-white rounded-md text-[10px] font-bold hover:bg-[#193073] shadow-xs cursor-pointer"
                     >
-                      Inspect Feed
+                      Inspect Stream
                     </button>
                   </div>
                 </div>
@@ -208,19 +281,27 @@ export const LightGujaratMap: React.FC<LightGujaratMapProps> = ({
       </MapContainer>
 
       {/* Floating Map Legend in Bottom Left */}
-      <div className="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-sm border border-slate-200 p-2.5 rounded-xl shadow-md text-xs space-y-1">
+      <div className="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-sm border border-slate-200 p-2.5 rounded-xl shadow-md text-xs space-y-1.5 font-mono">
         <div className="font-bold text-slate-800 text-[11px] flex items-center space-x-1.5">
           <Shield className="w-3.5 h-3.5 text-[#1E3A8A]" />
-          <span>Gujarat Unified Camera Layer</span>
+          <span>OneFeed™ Statewide Unified Camera Grid</span>
         </div>
-        <div className="flex items-center space-x-3 text-[10px] font-mono text-slate-600">
+        <div className="flex flex-wrap items-center gap-3 text-[10px] text-slate-600">
           <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A8A] border border-white" />
-            <span>Regular CCTV ({cameras.length} Active)</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Online ({cameras.filter((c) => c.health_status === 'ONLINE').length})</span>
           </span>
-          <span className="flex items-center space-x-1 text-red-600 font-bold">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626] border border-white animate-pulse" />
-            <span>Hotlist Sighting</span>
+          <span className="flex items-center space-x-1 text-amber-700 font-bold">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <span>Tampered ({cameras.filter((c) => c.health_status === 'TAMPERED_OCCLUDED' || c.tamper_alert).length})</span>
+          </span>
+          <span className="flex items-center space-x-1 text-red-600">
+            <span className="w-2 h-2 rounded-full bg-red-600" />
+            <span>Offline / Loss ({cameras.filter((c) => c.health_status === 'OFFLINE_TIMEOUT' || c.health_status === 'VIDEO_LOSS').length})</span>
+          </span>
+          <span className="flex items-center space-x-1 text-red-700 font-bold">
+            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
+            <span>Hotlist Hit</span>
           </span>
         </div>
       </div>

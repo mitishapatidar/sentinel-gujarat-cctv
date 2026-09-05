@@ -1,5 +1,5 @@
 import datetime
-from database import SessionLocal, init_db, Camera, Watchlist, Detection, Base, engine
+from database import SessionLocal, init_db, Camera, Watchlist, Detection, AnomalyAlert, Base, engine
 
 def seed_database():
     Base.metadata.drop_all(bind=engine)
@@ -8,6 +8,7 @@ def seed_database():
 
     try:
         # Clear existing data cleanly
+        db.query(AnomalyAlert).delete()
         db.query(Detection).delete()
         db.query(Watchlist).delete()
         db.query(Camera).delete()
@@ -74,7 +75,35 @@ def seed_database():
             {"id": 52, "name": "Sanand GIDC Automobile Corridor Post", "department": "RTO", "lat": 22.9812, "lng": 72.3789, "stream_url": "rtsp://live.cctv.gujarat.gov.in/feed/cam_san_52", "status": "online", "city": "Ahmedabad"}
         ]
 
-        for cam in cameras_data:
+        VENDORS = ["Hikvision DarkFighter", "CP Plus Intelli-Vision", "Milestone XProtect", "Genetec Omnicast", "Axis Q-Series", "Honeywell MAXPRO", "Dahua Starlight"]
+        PROTOCOLS = ["ONVIF Profile T", "Hikvision ISAPI", "Milestone REST API", "RTSP H.265", "Genetec Media Gateway", "WebRTC WHEP"]
+
+        for idx, cam in enumerate(cameras_data):
+            cam_id = cam["id"]
+            cam["vendor"] = VENDORS[(cam_id - 1) % len(VENDORS)]
+            cam["protocol"] = PROTOCOLS[(cam_id - 1) % len(PROTOCOLS)]
+            cam["fps"] = 30 if cam_id % 3 != 0 else 25
+            cam["resolution"] = "1080p Full HD" if cam_id % 4 != 0 else "4K Ultra HD"
+            cam["last_heartbeat"] = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(seconds=(cam_id * 7) % 60)
+
+            # Specific realistic health anomalies:
+            if cam_id in [9, 23]:
+                cam["health_status"] = "TAMPERED_OCCLUDED"
+                cam["tamper_alert"] = True
+                cam["status"] = "online"  # Still pinging over network, but video lens is occluded/spray painted!
+            elif cam_id in [28, 44]:
+                cam["health_status"] = "OFFLINE_TIMEOUT"
+                cam["tamper_alert"] = False
+                cam["status"] = "offline"
+            elif cam_id == 39:
+                cam["health_status"] = "VIDEO_LOSS"
+                cam["tamper_alert"] = False
+                cam["status"] = "offline"
+            else:
+                cam["health_status"] = "ONLINE"
+                cam["tamper_alert"] = False
+                cam["status"] = "online"
+
             db.add(Camera(**cam))
         db.commit()
 
@@ -150,60 +179,367 @@ def seed_database():
             db.add(Watchlist(**wl))
         db.commit()
 
-        print("[INFO] Seeding clean, chronological route detections for suspect vehicles...")
+        print("[INFO] Seeding clean, chronological route detections with vehicle forensic attributes...")
         now = datetime.datetime.now(datetime.timezone.utc)
         detections_data = [
-            # 1. GJ01AB1234 (Kalupur Heist route -> Gandhinagar Infocity)
-            {"camera_id": 4,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=105), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 1},
-            {"camera_id": 3,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=80),  "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 1},
-            {"camera_id": 2,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=52),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 1},
-            {"camera_id": 7,  "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=28),  "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 1},
-            {"camera_id": 27, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=8),   "is_alert": True, "confidence": 0.99, "matched_watchlist_id": 1},
+            # 1. GJ01AB1234 (Kalupur Heist route -> Gandhinagar Infocity + CLONED Teleportation to Surat)
+            {
+                "camera_id": 4, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=105),
+                "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 1,
+                "vehicle_color": "White", "vehicle_type": "Hatchback", "vehicle_make": "Maruti Swift",
+                "speed_kmh": 48.5, "heading": "Westbound", "snapshot_url": "/snapshots/swift_white.jpg"
+            },
+            {
+                "camera_id": 3, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=80),
+                "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 1,
+                "vehicle_color": "White", "vehicle_type": "Hatchback", "vehicle_make": "Maruti Swift",
+                "speed_kmh": 58.0, "heading": "Northbound", "snapshot_url": "/snapshots/swift_white.jpg"
+            },
+            {
+                "camera_id": 2, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=52),
+                "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 1,
+                "vehicle_color": "White", "vehicle_type": "Hatchback", "vehicle_make": "Maruti Swift",
+                "speed_kmh": 68.2, "heading": "Northbound", "snapshot_url": "/snapshots/swift_white.jpg"
+            },
+            {
+                "camera_id": 7, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=28),
+                "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 1,
+                "vehicle_color": "White", "vehicle_type": "Hatchback", "vehicle_make": "Maruti Swift",
+                "speed_kmh": 74.0, "heading": "Northbound", "snapshot_url": "/snapshots/swift_white.jpg"
+            },
+            {
+                "camera_id": 27, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=8),
+                "is_alert": True, "confidence": 0.99, "matched_watchlist_id": 1,
+                "vehicle_color": "White", "vehicle_type": "Hatchback", "vehicle_make": "Maruti Swift",
+                "speed_kmh": 82.5, "heading": "Eastbound", "snapshot_url": "/snapshots/swift_white.jpg"
+            },
+            # --- TELEPORTATION ANOMALY SIGHTING FOR GJ01AB1234 (Surat Ring Road 260km away just 10 mins after Vaishnodevi!) ---
+            {
+                "camera_id": 40, "plate_number": "GJ01AB1234", "timestamp": now - datetime.timedelta(minutes=18),
+                "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 1,
+                "vehicle_color": "White", "vehicle_type": "Sedan", "vehicle_make": "Maruti Dzire",
+                "speed_kmh": 55.0, "heading": "Southbound", "snapshot_url": "/snapshots/dzire_white.jpg"
+            },
 
-            # 2. GJ06XX9999 (Amber Alert Kidnapping: Vastrapur -> Pakwan -> Gota -> Vaishnodevi -> CH-0)
-            {"camera_id": 19, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=55), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 4},
-            {"camera_id": 2,  "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=38), "is_alert": True, "confidence": 0.99, "matched_watchlist_id": 4},
-            {"camera_id": 8,  "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=22), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 4},
-            {"camera_id": 7,  "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=9),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 4},
-            {"camera_id": 29, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=2),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 4},
+            # 2. GJ06XX9999 (Amber Alert Kidnapping: Vastrapur -> Pakwan -> Gota -> Vaishnodevi -> Gandhinagar)
+            {
+                "camera_id": 19, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=55),
+                "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 4,
+                "vehicle_color": "Red", "vehicle_type": "SUV", "vehicle_make": "Hyundai Creta",
+                "speed_kmh": 52.0, "heading": "Westbound", "snapshot_url": "/snapshots/creta_red.jpg"
+            },
+            {
+                "camera_id": 2, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=38),
+                "is_alert": True, "confidence": 0.99, "matched_watchlist_id": 4,
+                "vehicle_color": "Red", "vehicle_type": "SUV", "vehicle_make": "Hyundai Creta",
+                "speed_kmh": 66.5, "heading": "Northbound", "snapshot_url": "/snapshots/creta_red.jpg"
+            },
+            {
+                "camera_id": 8, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=22),
+                "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 4,
+                "vehicle_color": "Red", "vehicle_type": "SUV", "vehicle_make": "Hyundai Creta",
+                "speed_kmh": 73.0, "heading": "Northbound", "snapshot_url": "/snapshots/creta_red.jpg"
+            },
+            {
+                "camera_id": 7, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=9),
+                "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 4,
+                "vehicle_color": "Red", "vehicle_type": "SUV", "vehicle_make": "Hyundai Creta",
+                "speed_kmh": 78.4, "heading": "Northbound", "snapshot_url": "/snapshots/creta_red.jpg"
+            },
+            {
+                "camera_id": 29, "plate_number": "GJ06XX9999", "timestamp": now - datetime.timedelta(minutes=2),
+                "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 4,
+                "vehicle_color": "Red", "vehicle_type": "SUV", "vehicle_make": "Hyundai Creta",
+                "speed_kmh": 62.0, "heading": "Northbound", "snapshot_url": "/snapshots/creta_red.jpg"
+            },
 
             # 3. GJ27CD5678 (Hit-and-Run Scorpio: Narol -> Sarkhej -> South Bopal)
-            {"camera_id": 6,  "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=45), "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 2},
-            {"camera_id": 10, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=26), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 2},
-            {"camera_id": 16, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=10), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 2},
+            {
+                "camera_id": 6, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=45),
+                "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 2,
+                "vehicle_color": "Black", "vehicle_type": "SUV", "vehicle_make": "Mahindra Scorpio",
+                "speed_kmh": 69.0, "heading": "Westbound", "snapshot_url": "/snapshots/scorpio_black.jpg"
+            },
+            {
+                "camera_id": 10, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=26),
+                "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 2,
+                "vehicle_color": "Black", "vehicle_type": "SUV", "vehicle_make": "Mahindra Scorpio",
+                "speed_kmh": 74.5, "heading": "Northbound", "snapshot_url": "/snapshots/scorpio_black.jpg"
+            },
+            {
+                "camera_id": 16, "plate_number": "GJ27CD5678", "timestamp": now - datetime.timedelta(minutes=10),
+                "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 2,
+                "vehicle_color": "Black", "vehicle_type": "SUV", "vehicle_make": "Mahindra Scorpio",
+                "speed_kmh": 78.0, "heading": "Westbound", "snapshot_url": "/snapshots/scorpio_black.jpg"
+            },
 
             # 4. GJ05EF9012 (Stolen Fortuner: Surat Textile -> Athwa Gate -> Kamrej Toll NH-48)
-            {"camera_id": 40, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=60), "is_alert": True, "confidence": 0.92, "matched_watchlist_id": 3},
-            {"camera_id": 41, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=35), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 3},
-            {"camera_id": 42, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=12), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 3},
+            {
+                "camera_id": 40, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=60),
+                "is_alert": True, "confidence": 0.92, "matched_watchlist_id": 3,
+                "vehicle_color": "White", "vehicle_type": "SUV", "vehicle_make": "Toyota Fortuner",
+                "speed_kmh": 62.0, "heading": "Southbound", "snapshot_url": "/snapshots/fortuner_white.jpg"
+            },
+            {
+                "camera_id": 41, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=35),
+                "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 3,
+                "vehicle_color": "White", "vehicle_type": "SUV", "vehicle_make": "Toyota Fortuner",
+                "speed_kmh": 70.0, "heading": "Eastbound", "snapshot_url": "/snapshots/fortuner_white.jpg"
+            },
+            {
+                "camera_id": 42, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=12),
+                "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 3,
+                "vehicle_color": "White", "vehicle_type": "SUV", "vehicle_make": "Toyota Fortuner",
+                "speed_kmh": 85.0, "heading": "Eastbound", "snapshot_url": "/snapshots/fortuner_white.jpg"
+            },
 
             # 5. DA07CLX (YouTube Cam 2: Stolen Silver Mazda on SG Highway)
-            {"camera_id": 1,  "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=32), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 5},
-            {"camera_id": 2,  "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=14), "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 5},
-            {"camera_id": 7,  "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=4),  "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 5},
+            {
+                "camera_id": 1, "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=32),
+                "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 5,
+                "vehicle_color": "Silver", "vehicle_type": "Sedan", "vehicle_make": "Mazda 3",
+                "speed_kmh": 68.0, "heading": "Northbound", "snapshot_url": "/snapshots/mazda_silver.jpg"
+            },
+            {
+                "camera_id": 2, "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=14),
+                "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 5,
+                "vehicle_color": "Silver", "vehicle_type": "Sedan", "vehicle_make": "Mazda 3",
+                "speed_kmh": 71.5, "heading": "Northbound", "snapshot_url": "/snapshots/mazda_silver.jpg"
+            },
+            {
+                "camera_id": 7, "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=4),
+                "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 5,
+                "vehicle_color": "Silver", "vehicle_type": "Sedan", "vehicle_make": "Mazda 3",
+                "speed_kmh": 75.0, "heading": "Northbound", "snapshot_url": "/snapshots/mazda_silver.jpg"
+            },
 
             # 6. EY09VWS (YouTube Cam 2: Stolen Nissan Delivery Van)
-            {"camera_id": 1,  "plate_number": "EY09VWS", "timestamp": now - datetime.timedelta(minutes=24), "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 6},
-            {"camera_id": 8,  "plate_number": "EY09VWS", "timestamp": now - datetime.timedelta(minutes=7),  "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 6},
+            {
+                "camera_id": 1, "plate_number": "EY09VWS", "timestamp": now - datetime.timedelta(minutes=24),
+                "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 6,
+                "vehicle_color": "Silver", "vehicle_type": "Truck", "vehicle_make": "Nissan Primastar",
+                "speed_kmh": 54.0, "heading": "Northbound", "snapshot_url": "/snapshots/nissan_van.jpg"
+            },
+            {
+                "camera_id": 8, "plate_number": "EY09VWS", "timestamp": now - datetime.timedelta(minutes=7),
+                "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 6,
+                "vehicle_color": "Silver", "vehicle_type": "Truck", "vehicle_make": "Nissan Primastar",
+                "speed_kmh": 58.0, "heading": "Northbound", "snapshot_url": "/snapshots/nissan_van.jpg"
+            },
 
             # 7. MH46T7527 (YouTube Cam 3: Missing Inter-State Ertiga Taxi)
-            {"camera_id": 3,  "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=40), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 7},
-            {"camera_id": 14, "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=18), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 7},
-            {"camera_id": 4,  "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=5),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 7},
+            {
+                "camera_id": 3, "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=40),
+                "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 7,
+                "vehicle_color": "White", "vehicle_type": "SUV", "vehicle_make": "Maruti Ertiga",
+                "speed_kmh": 50.0, "heading": "Northbound", "snapshot_url": "/snapshots/ertiga_white.jpg"
+            },
+            {
+                "camera_id": 14, "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=18),
+                "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 7,
+                "vehicle_color": "White", "vehicle_type": "SUV", "vehicle_make": "Maruti Ertiga",
+                "speed_kmh": 55.0, "heading": "Eastbound", "snapshot_url": "/snapshots/ertiga_white.jpg"
+            },
+            {
+                "camera_id": 4, "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=5),
+                "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 7,
+                "vehicle_color": "White", "vehicle_type": "SUV", "vehicle_make": "Maruti Ertiga",
+                "speed_kmh": 58.5, "heading": "Eastbound", "snapshot_url": "/snapshots/ertiga_white.jpg"
+            },
 
             # 8. MH04EE1980 (YouTube Cam 3: Red Hatchback Hit-and-Run)
-            {"camera_id": 7,  "plate_number": "MH04EE1980", "timestamp": now - datetime.timedelta(minutes=22), "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 8},
-            {"camera_id": 2,  "plate_number": "MH04EE1980", "timestamp": now - datetime.timedelta(minutes=9),  "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 8},
+            {
+                "camera_id": 7, "plate_number": "MH04EE1980", "timestamp": now - datetime.timedelta(minutes=22),
+                "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 8,
+                "vehicle_color": "Red", "vehicle_type": "Hatchback", "vehicle_make": "Hyundai i20",
+                "speed_kmh": 64.0, "heading": "Southbound", "snapshot_url": "/snapshots/i20_red.jpg"
+            },
+            {
+                "camera_id": 2, "plate_number": "MH04EE1980", "timestamp": now - datetime.timedelta(minutes=9),
+                "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 8,
+                "vehicle_color": "Red", "vehicle_type": "Hatchback", "vehicle_make": "Hyundai i20",
+                "speed_kmh": 67.0, "heading": "Southbound", "snapshot_url": "/snapshots/i20_red.jpg"
+            },
+
+            # 9. Additional statewide background vehicles for attribute search
+            {
+                "camera_id": 33, "plate_number": "GJ03BV8821", "timestamp": now - datetime.timedelta(minutes=48),
+                "is_alert": False, "confidence": 0.96, "matched_watchlist_id": None,
+                "vehicle_color": "Blue", "vehicle_type": "Sedan", "vehicle_make": "Honda City",
+                "speed_kmh": 61.0, "heading": "Northbound", "snapshot_url": "/snapshots/city_blue.jpg"
+            },
+            {
+                "camera_id": 48, "plate_number": "GJ03TR4410", "timestamp": now - datetime.timedelta(minutes=30),
+                "is_alert": False, "confidence": 0.94, "matched_watchlist_id": None,
+                "vehicle_color": "Black", "vehicle_type": "SUV", "vehicle_make": "Tata Harrier",
+                "speed_kmh": 72.0, "heading": "Westbound", "snapshot_url": "/snapshots/harrier_black.jpg"
+            },
+            {
+                "camera_id": 45, "plate_number": "GJ06TR9901", "timestamp": now - datetime.timedelta(minutes=15),
+                "is_alert": False, "confidence": 0.95, "matched_watchlist_id": None,
+                "vehicle_color": "White", "vehicle_type": "Truck", "vehicle_make": "Ashok Leyland",
+                "speed_kmh": 45.0, "heading": "Southbound", "snapshot_url": "/snapshots/truck_white.jpg"
+            },
+            {
+                "camera_id": 18, "plate_number": "GJ01MC2022", "timestamp": now - datetime.timedelta(minutes=12),
+                "is_alert": False, "confidence": 0.93, "matched_watchlist_id": None,
+                "vehicle_color": "Black", "vehicle_type": "Motorcycle", "vehicle_make": "Royal Enfield Classic",
+                "speed_kmh": 42.0, "heading": "Eastbound", "snapshot_url": "/snapshots/bullet_black.jpg"
+            },
         ]
 
         for det in detections_data:
             db.add(Detection(**det))
         db.commit()
 
+        print("[INFO] Seeding Multi-Modal Anomaly Alerts across Gujarat...")
+        anomaly_alerts_data = [
+            # 1. WRONG-WAY DRIVING (Expressways & Flyovers)
+            {
+                "category": "WRONG_WAY_DRIVING",
+                "title": "Wrong-Way Vehicle on NE-1 Expressway Entry Ramp",
+                "camera_id": 45,
+                "severity": "CRITICAL",
+                "timestamp": now - datetime.timedelta(minutes=4),
+                "target_identifier": "GJ06-EF-8190 (White Mahindra Bolero)",
+                "details": "Optical flow vectors confirm vehicle travelling Southbound on designated Northbound exit ramp at 58 km/h. Severe collision hazard.",
+                "location_name": "NE-1 National Expressway - Vadodara North Entry",
+                "city": "Vadodara",
+                "lat": 22.3072,
+                "lng": 73.1812,
+                "status": "ACTIVE",
+                "action_taken": "Overhead VMS Caution 'WRONG WAY DETECTED' triggered; Toll barrier 2km downstream signaled",
+                "snapshot_url": "/snapshots/wrong_way_ne1.jpg"
+            },
+            {
+                "category": "WRONG_WAY_DRIVING",
+                "title": "Counter-Flow Vehicle on Gota Flyover Down-Ramp",
+                "camera_id": 8,
+                "severity": "CRITICAL",
+                "timestamp": now - datetime.timedelta(minutes=16),
+                "target_identifier": "GJ01-TG-4412 (Yellow CNG Auto-Rickshaw)",
+                "details": "Three-wheeler proceeding against traffic flow on one-way bridge flyover decline at 36 km/h. Blind spot hazard.",
+                "location_name": "SG Highway - Gota Flyover Incline",
+                "city": "Ahmedabad",
+                "lat": 23.0905,
+                "lng": 72.5312,
+                "status": "ACTIVE",
+                "action_taken": "PCR Unit 04 dispatched to intercept ramp entrance",
+                "snapshot_url": "/snapshots/wrong_way_gota.jpg"
+            },
+
+            # 2. AFTER-HOURS ATM LOITERING (01:00 AM - 05:00 AM, Dwell > 5 mins within 3m)
+            {
+                "category": "ATM_LOITERING",
+                "title": "Suspicious After-Hours ATM Loitering (Dwell: 7m 42s)",
+                "camera_id": 15,
+                "severity": "HIGH",
+                "timestamp": now - datetime.timedelta(minutes=11),
+                "target_identifier": "Person #P-812 (Black Hooded Jacket, Occluded Face)",
+                "details": "Subject loitering 1.4m from ATM cash dispenser for 462 seconds between 01:00 AM - 05:00 AM window. Repeated cash slot tampering checks without card insertion.",
+                "location_name": "SBI E-Lobby 24/7 ATM - C.G. Road Commercial Center",
+                "city": "Ahmedabad",
+                "lat": 23.0360,
+                "lng": 72.5601,
+                "status": "ACTIVE",
+                "action_taken": "Automated 110dB Audio Strobe primed; Navrangpura Night PCR alerted",
+                "snapshot_url": "/snapshots/atm_loiter_cg.jpg"
+            },
+            {
+                "category": "ATM_LOITERING",
+                "title": "Two Individuals Hovering at ATM Vestibule (Dwell: 6m 20s)",
+                "camera_id": 41,
+                "severity": "HIGH",
+                "timestamp": now - datetime.timedelta(minutes=28),
+                "target_identifier": "Group #P-903 (Two Individuals with Concealed Tools)",
+                "details": "Subjects lingering 2.1m outside ATM vestibule corner for 380 seconds at 03:14 AM. Suspicious surveillance of approaching pedestrians.",
+                "location_name": "Bank of Baroda 24/7 ATM - Athwa Gate Ring Road",
+                "city": "Surat",
+                "lat": 21.1764,
+                "lng": 72.8091,
+                "status": "ACTIVE",
+                "action_taken": "Surat Sector 2 Night Patrol Van dispatched",
+                "snapshot_url": "/snapshots/atm_loiter_surat.jpg"
+            },
+
+            # 3. CROWD SURGE / SUDDEN DISPERSAL (Panic Signature & Velocity Jump)
+            {
+                "category": "CROWD_SURGE",
+                "title": "Sudden Crowd Panic Dispersal & Surge Signature",
+                "camera_id": 5,
+                "severity": "CRITICAL",
+                "timestamp": now - datetime.timedelta(minutes=7),
+                "target_identifier": "Cluster #CS-104 (~78 Persons)",
+                "details": "Crowd velocity jumped abruptly from 0.8 m/s to 4.1 m/s (Δv = 3.3 m/s) in omnidirectional dispersal pattern. High probability of violent altercation or stampede outbreak.",
+                "location_name": "Kalupur Central Railway Station Concourse",
+                "city": "Ahmedabad",
+                "lat": 23.0270,
+                "lng": 72.5980,
+                "status": "ACTIVE",
+                "action_taken": "Railway Police Force (RPF) & Kalupur Chowki QRT mobilized for perimeter containment",
+                "snapshot_url": "/snapshots/crowd_surge_kalupur.jpg"
+            },
+            {
+                "category": "CROWD_SURGE",
+                "title": "Night Market Crowd Compression & Violent Skirmish",
+                "camera_id": 17,
+                "severity": "HIGH",
+                "timestamp": now - datetime.timedelta(minutes=35),
+                "target_identifier": "Cluster #CS-208 (~115 Persons)",
+                "details": "Localized crowd entropy surge with density collapse from 4.2 persons/m² to peripheral flight. Brawl signature verified by multi-point keypoint tracking.",
+                "location_name": "Manek Chowk Heritage Food Plaza",
+                "city": "Ahmedabad",
+                "lat": 23.0245,
+                "lng": 72.5895,
+                "status": "DISPATCHED",
+                "action_taken": "PCR Van 12 on-site; situation de-escalated and logged",
+                "snapshot_url": "/snapshots/crowd_manek.jpg"
+            },
+
+            # 4. TRAFFIC VIOLATIONS (Triple Riding & No Helmet)
+            {
+                "category": "TRAFFIC_VIOLATION",
+                "title": "Triple Riding on Two-Wheeler + Zero Helmets (0/3)",
+                "camera_id": 2,
+                "severity": "MEDIUM",
+                "timestamp": now - datetime.timedelta(minutes=13),
+                "target_identifier": "GJ01-MX-7809 (Black Honda Activa)",
+                "details": "3 occupants detected on single 2-wheeler chassis. 0 helmets detected. Vehicle speeding through intersection at 46 km/h.",
+                "location_name": "SG Highway - Pakwan Cross Road",
+                "city": "Ahmedabad",
+                "lat": 23.0396,
+                "lng": 72.5126,
+                "status": "ACTIVE",
+                "action_taken": "Automated e-Challan #ECH-GJ-2026-8819 (₹1,500 fine) generated via RTO VAHAN gateway",
+                "snapshot_url": "/snapshots/activa_triple.jpg"
+            },
+            {
+                "category": "TRAFFIC_VIOLATION",
+                "title": "Triple Riding + Rider Without Helmet (2/3)",
+                "camera_id": 3,
+                "severity": "MEDIUM",
+                "timestamp": now - datetime.timedelta(minutes=42),
+                "target_identifier": "GJ27-AK-5521 (Red Hero Splendor)",
+                "details": "3 occupants detected on motorcycle. Pillion riders lacking mandatory safety headgear. Speed: 41 km/h.",
+                "location_name": "Ashram Road - Metro Flyover Junction",
+                "city": "Ahmedabad",
+                "lat": 23.0338,
+                "lng": 72.5714,
+                "status": "ACTIVE",
+                "action_taken": "Automated e-Challan #ECH-GJ-2026-8820 queued with photographic evidence",
+                "snapshot_url": "/snapshots/splendor_triple.jpg"
+            },
+        ]
+
+        for anom in anomaly_alerts_data:
+            db.add(AnomalyAlert(**anom))
+        db.commit()
+
         print("[SUCCESS] Database seeded successfully:")
         print(f" - {len(cameras_data)} Cameras (Scale: 52 cameras statewide across Police, RTO, Civil Supplies)")
         print(f" - {len(watchlist_data)} Watchlist Entries ('GJ01AB1234', 'GJ27CD5678', 'GJ05EF9012')")
         print(f" - {len(detections_data)} Detections (including 5-point trajectory for 'GJ01AB1234' across 4+ cameras)")
+        print(f" - {len(anomaly_alerts_data)} Multi-Modal Anomaly Incidents (Wrong-Way, ATM Loiter, Crowd Surge, Traffic Violations)")
 
     except Exception as e:
         db.rollback()
