@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { OfficialGovBar } from '../../components/OfficialGovBar';
+import { OfficialGovFooter } from '../../components/OfficialGovFooter';
 import { DetectionAttribute, PlausibilityResult, PlausibilitySegment } from '../../types';
 import { 
   Route, Shield, Search, AlertTriangle, CheckCircle2, Car, Compass, 
@@ -660,10 +661,7 @@ function TrailInner() {
       </main>
 
       {/* Official Government Footer */}
-      <footer className="py-3 px-8 bg-white border-t border-slate-200 text-center text-xs text-slate-500 font-mono flex flex-wrap items-center justify-between">
-        <span>SENTINEL Forensic Trail Engine • State Crime Records Bureau (SCRB), Gujarat Police</span>
-        <span className="text-slate-400">Court-Admissible Evidence Pipeline • Encrypted Network</span>
-      </footer>
+      <OfficialGovFooter />
     </div>
   );
 }

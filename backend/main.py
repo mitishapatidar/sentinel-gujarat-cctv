@@ -610,12 +610,13 @@ def get_alerts(
 
     # 1. Hotlist ANPR alerts
     if not category or category.upper() in ["ALL", "HOTLIST_VEHICLE"]:
+        det_limit = limit if category and category.upper() == "HOTLIST_VEHICLE" else max(6, limit // 2)
         detections = (
             db.query(Detection)
             .filter(Detection.is_alert == True)
             .options(joinedload(Detection.camera), joinedload(Detection.matched_watchlist))
             .order_by(desc(Detection.timestamp))
-            .limit(limit)
+            .limit(det_limit)
             .all()
         )
         for d in detections:
@@ -644,8 +645,11 @@ def get_alerts(
     anom_query = db.query(AnomalyAlert).options(joinedload(AnomalyAlert.camera))
     if category and category.upper() not in ["ALL", "HOTLIST_VEHICLE"]:
         anom_query = anom_query.filter(AnomalyAlert.category.ilike(f"%{category.strip()}%"))
+        anom_limit = limit
+    else:
+        anom_limit = max(6, limit - len(alerts))
 
-    anomalies = anom_query.order_by(desc(AnomalyAlert.timestamp)).limit(limit).all()
+    anomalies = anom_query.order_by(desc(AnomalyAlert.timestamp)).limit(anom_limit).all()
     for a in anomalies:
         cam_name = a.camera.name if a.camera else a.location_name
         dept = a.camera.department if a.camera else "Police"

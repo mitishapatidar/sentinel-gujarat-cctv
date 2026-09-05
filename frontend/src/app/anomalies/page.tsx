@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { OfficialGovBar } from '../../components/OfficialGovBar';
+import { OfficialGovFooter } from '../../components/OfficialGovFooter';
 import { AnomalyAlert, AnomalyCategory, AnomalySummary } from '../../types';
 import { 
   AlertOctagon, 
@@ -749,6 +750,9 @@ function AnomaliesInner() {
           </div>
         </div>
       </main>
+
+      {/* Official Government Footer */}
+      <OfficialGovFooter />
     </div>
   );
 }

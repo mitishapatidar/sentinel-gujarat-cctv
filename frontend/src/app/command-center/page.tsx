@@ -5,8 +5,9 @@ import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { Camera, Watchlist, TrajectoryPoint, Alert, CameraHealthSummary } from '../../types';
 import { OfficialGovBar } from '../../components/OfficialGovBar';
+import { OfficialGovFooter } from '../../components/OfficialGovFooter';
 import { TACTICAL_CASES, TacticalCase } from '../../data/casesData';
-import { Video, Shield, Navigation, AlertTriangle, Bell, Search, MapPin, Radio, Car, ShieldCheck, Download, Siren, Lock, CheckCircle2, ChevronRight, Activity, Filter, AlertOctagon, ArrowRight, X, Cpu, Server, HardDrive, EyeOff, WifiOff, RefreshCw, SlidersHorizontal, AlertCircle } from 'lucide-react';
+import { Video, Shield, Navigation, AlertTriangle, Bell, Search, MapPin, Radio, Car, ShieldCheck, Download, Siren, Lock, CheckCircle2, ChevronRight, Activity, Filter, AlertOctagon, ArrowRight, X, Cpu, Server, HardDrive, EyeOff, WifiOff, RefreshCw, SlidersHorizontal, AlertCircle, Eye, Wrench } from 'lucide-react';
 
 // SSR-safe dynamic import for LightGujaratMap
 const DynamicLightGujaratMap = dynamic(() => import('../../components/LightGujaratMap'), {
@@ -37,6 +38,7 @@ function CommandCenterInner() {
   const [healthFilter, setHealthFilter] = useState<'ALL' | 'ONLINE' | 'TAMPERED' | 'OFFLINE'>('ALL');
   const [vendorFilter, setVendorFilter] = useState<string>('ALL');
   const [selectedTamperCam, setSelectedTamperCam] = useState<Camera | null>(null);
+  const [isDiagnosticsOpen, setIsDiagnosticsOpen] = useState<boolean>(false);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [trajectory, setTrajectory] = useState<TrajectoryPoint[]>([]);
   const [searchedPlate, setSearchedPlate] = useState('GJ06XX9999');
@@ -387,200 +389,291 @@ function CommandCenterInner() {
         </div>
       )}
 
-      {/* OneFeed™ Statewide Multi-Vendor Ingestion & Camera Health Watchdog */}
+      {/* Gujarat State Integrated Surveillance Command Overview */}
       <div className="px-5 pt-4 max-w-[1920px] mx-auto w-full">
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
-          {/* Header row */}
+          {/* Header row with Mode Switcher */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 text-[#1E3A8A] flex items-center justify-center shadow-xs">
-                <Activity className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-xl bg-[#1E3A8A] text-white flex items-center justify-center shadow-sm">
+                <Shield className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 <div className="flex items-center space-x-2">
                   <span className="font-mono text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-blue-100 text-[#1E3A8A] tracking-wider">
-                    IDEA 1 • ONEFEED™ INGESTION ENGINE
+                    GUJARAT STATE INTEGRATED CCTV NETWORK
                   </span>
-                  <span className="text-[11px] font-mono text-slate-500 hidden sm:inline">
-                    Statewide Multi-Vendor CCTV & VMS Federation
+                  <span className="text-[11px] font-mono text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 hidden sm:inline-flex items-center space-x-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>80,000 Nodes Active • GSWAN Grid Secured</span>
                   </span>
                 </div>
-                <h2 className="text-sm font-bold text-slate-900 tracking-tight">
-                  Automated Camera Health Watchdog & Edge Bandwidth Triage
+                <h2 className="text-sm font-bold text-slate-900 tracking-tight mt-0.5">
+                  Real-time Multi-Agency Surveillance & Autonomous Alert Grid
                 </h2>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-              <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200 flex items-center space-x-1.5">
-                <Server className="w-3.5 h-3.5 text-blue-600" />
-                <span>7 VMS Adapters (Milestone • Genetec • Hikvision • CP Plus • Axis)</span>
-              </span>
-              <span className="bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200 flex items-center space-x-1.5 font-bold">
-                <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Edge Triage Bandwidth: 500x WAN Relief</span>
-              </span>
-            </div>
-          </div>
-
-          {/* 4 Metric KPI Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {/* 1. Statewide Health / Uptime */}
-            <div
-              onClick={() => setHealthFilter('ONLINE')}
-              className={`p-3 rounded-xl border transition-all cursor-pointer ${
-                healthFilter === 'ONLINE'
-                  ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-200'
-                  : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>OPERATIONAL UPTIME</span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              </div>
-              <div className="text-lg font-black text-slate-900 font-mono mt-0.5">
-                {healthSummary?.uptime_percentage ?? 90.4}%
-                <span className="text-xs font-semibold text-slate-500 ml-1.5 font-sans">
-                  ({healthSummary?.online_count ?? 47}/{healthSummary?.total_registered ?? 52} Online)
+            {/* View Mode Toggle Button */}
+            <div className="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+              <button
+                onClick={() => setIsDiagnosticsOpen(false)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 cursor-pointer ${
+                  !isDiagnosticsOpen
+                    ? 'bg-white text-[#1E3A8A] font-bold shadow-xs border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>Officer View</span>
+              </button>
+              <button
+                onClick={() => setIsDiagnosticsOpen(true)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 cursor-pointer ${
+                  isDiagnosticsOpen
+                    ? 'bg-[#1E3A8A] text-white font-bold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Wrench className="w-3.5 h-3.5" />
+                <span>VMS & Tamper Diagnostics</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${isDiagnosticsOpen ? 'bg-blue-800 text-blue-200' : 'bg-slate-200 text-slate-700'}`}>
+                  7 Adapters
                 </span>
-              </div>
-              <div className="text-[10px] text-emerald-700 font-mono font-medium mt-1">
-                Heartbeat Verified (30 FPS Ingest)
-              </div>
-            </div>
-
-            {/* 2. Automated Tamper Watchdog */}
-            <div
-              onClick={() => {
-                setHealthFilter('TAMPERED');
-                const tCam = cameras.find((c) => c.tamper_alert || c.health_status === 'TAMPERED_OCCLUDED');
-                if (tCam) setSelectedTamperCam(tCam);
-              }}
-              className={`p-3 rounded-xl border transition-all cursor-pointer ${
-                healthFilter === 'TAMPERED'
-                  ? 'bg-amber-50 border-amber-300 ring-2 ring-amber-200'
-                  : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>TAMPER DETECTIONS</span>
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-              </div>
-              <div className="text-lg font-black text-amber-900 font-mono mt-0.5 flex items-center space-x-2">
-                <span>{healthSummary?.tampered_count ?? 2} Occluded Cams</span>
-              </div>
-              <div className="text-[10px] text-amber-800 font-mono font-medium mt-1 flex items-center space-x-1">
-                <span>Lens Spray / Obstruction Flagged</span>
-              </div>
-            </div>
-
-            {/* 3. Offline / Loss Watchdog */}
-            <div
-              onClick={() => setHealthFilter('OFFLINE')}
-              className={`p-3 rounded-xl border transition-all cursor-pointer ${
-                healthFilter === 'OFFLINE'
-                  ? 'bg-red-50 border-red-300 ring-2 ring-red-200'
-                  : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>OFFLINE / SIGNAL LOSS</span>
-                <span className="w-2 h-2 rounded-full bg-red-500" />
-              </div>
-              <div className="text-lg font-black text-red-700 font-mono mt-0.5">
-                {(healthSummary?.offline_count ?? 2) + (healthSummary?.video_loss_count ?? 1)} Dead Feeds
-              </div>
-              <div className="text-[10px] text-red-600 font-mono font-medium mt-1">
-                Ping Timeout (&gt;60s) • Auto-Failover
-              </div>
-            </div>
-
-            {/* 4. Bandwidth Savings Arithmetic */}
-            <div className="p-3 rounded-xl border border-slate-200 bg-slate-50">
-              <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>STATE WAN BANDWIDTH</span>
-                <span className="text-[10px] font-bold text-[#1E3A8A] font-mono">500x SAVINGS</span>
-              </div>
-              <div className="text-lg font-black text-[#1E3A8A] font-mono mt-0.5">
-                320 Mbps <span className="text-xs text-slate-400 font-normal">vs 160 Gbps</span>
-              </div>
-              <div className="text-[10px] text-slate-600 font-mono mt-1">
-                Edge Metadata Triage (99.8% Saved)
-              </div>
+              </button>
             </div>
           </div>
 
-          {/* Filter Ribbon: Health Quick-Filters + Vendor Selector */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-slate-100 text-xs">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="font-bold text-slate-700 font-mono text-[11px]">Audit Filter:</span>
-              <button
-                onClick={() => setHealthFilter('ALL')}
-                className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer ${
-                  healthFilter === 'ALL'
-                    ? 'bg-[#1E3A8A] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
-              >
-                All Feeds ({cameras.length})
-              </button>
-              <button
-                onClick={() => setHealthFilter('ONLINE')}
-                className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  healthFilter === 'ONLINE'
-                    ? 'bg-emerald-700 text-white shadow-xs'
-                    : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200'
-                }`}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span>Online ({cameras.filter((c) => c.health_status === 'ONLINE').length})</span>
-              </button>
-              <button
+          {/* Simple Officer View: 4 High-Impact Clear Metric Cards */}
+          {!isDiagnosticsOpen ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1">
+              {/* Card 1: Camera Grid Status */}
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                  <span className="font-bold">TOTAL CAMERAS</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                </div>
+                <div className="text-xl font-black text-slate-900 font-mono mt-1">
+                  80,000 <span className="text-xs font-normal text-slate-500">Nodes</span>
+                </div>
+                <div className="text-[11px] text-emerald-700 font-medium mt-1">
+                  {healthSummary?.uptime_percentage ?? 90.4}% Operational • 52 Live Ingest Streams
+                </div>
+              </div>
+
+              {/* Card 2: Active Pursuits / Alerts */}
+              <div className="bg-red-50/70 border border-red-200 rounded-xl p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between text-[11px] font-mono text-red-700 font-bold">
+                  <span>ACTIVE PURSUITS</span>
+                  <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
+                </div>
+                <div className="text-xl font-black text-red-900 font-mono mt-1">
+                  {alerts.length} <span className="text-xs font-normal text-red-700">Flagged Targets</span>
+                </div>
+                <div className="text-[11px] text-red-700 font-medium mt-1">
+                  Amber Alerts, Stolen & Cloned Vehicles
+                </div>
+              </div>
+
+              {/* Card 3: Network Bandwidth */}
+              <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between text-[11px] font-mono text-blue-800 font-bold">
+                  <span>STATE WAN BANDWIDTH</span>
+                  <span className="text-[10px] font-extrabold text-blue-900 bg-blue-100 px-1.5 py-0.5 rounded">500x SAVINGS</span>
+                </div>
+                <div className="text-xl font-black text-[#1E3A8A] font-mono mt-1">
+                  320 Mbps <span className="text-xs font-normal text-slate-500">vs 160 Gbps</span>
+                </div>
+                <div className="text-[11px] text-blue-800 font-medium mt-1">
+                  Edge Triage Active (99.8% GSWAN Relief)
+                </div>
+              </div>
+
+              {/* Card 4: Automated Tamper Watchdog */}
+              <div 
                 onClick={() => {
-                  setHealthFilter('TAMPERED');
                   const tCam = cameras.find((c) => c.tamper_alert || c.health_status === 'TAMPERED_OCCLUDED');
                   if (tCam) setSelectedTamperCam(tCam);
                 }}
-                className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  healthFilter === 'TAMPERED'
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-300'
-                }`}
+                className="bg-amber-50/80 border border-amber-200 hover:border-amber-300 rounded-xl p-3 flex flex-col justify-between cursor-pointer transition-all hover:bg-amber-100/60"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                <span>Tampered ({cameras.filter((c) => c.health_status === 'TAMPERED_OCCLUDED' || c.tamper_alert).length})</span>
-              </button>
-              <button
-                onClick={() => setHealthFilter('OFFLINE')}
-                className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  healthFilter === 'OFFLINE'
-                    ? 'bg-red-700 text-white shadow-xs'
-                    : 'bg-red-50 text-red-800 hover:bg-red-100 border border-red-200'
-                }`}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                <span>Offline / Loss ({cameras.filter((c) => c.health_status === 'OFFLINE_TIMEOUT' || c.health_status === 'VIDEO_LOSS').length})</span>
-              </button>
+                <div className="flex items-center justify-between text-[11px] font-mono text-amber-800 font-bold">
+                  <span>TAMPER WATCHDOG</span>
+                  <span className="text-[10px] font-bold text-amber-700 underline">Inspect Alert →</span>
+                </div>
+                <div className="text-xl font-black text-amber-900 font-mono mt-1 flex items-center space-x-2">
+                  <span>{healthSummary?.tampered_count ?? 2} Occluded</span>
+                  <span className="text-[10px] font-bold font-sans bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">
+                    Action Required
+                  </span>
+                </div>
+                <div className="text-[11px] text-amber-800 font-medium mt-1">
+                  Lens Spray / Physical Obstruction Flagged
+                </div>
+              </div>
             </div>
+          ) : (
+            /* Technical Diagnostics View: Detailed VMS Filters & Protocol Telemetry */
+            <div className="space-y-3 pt-1 border-t border-slate-100 animate-fade-in">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {/* 1. Statewide Health / Uptime */}
+                <div
+                  onClick={() => setHealthFilter('ONLINE')}
+                  className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                    healthFilter === 'ONLINE'
+                      ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-200'
+                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                    <span>OPERATIONAL UPTIME</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="text-lg font-black text-slate-900 font-mono mt-0.5">
+                    {healthSummary?.uptime_percentage ?? 90.4}%
+                    <span className="text-xs font-semibold text-slate-500 ml-1.5 font-sans">
+                      ({healthSummary?.online_count ?? 47}/{healthSummary?.total_registered ?? 52} Online)
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-emerald-700 font-mono font-medium mt-1">
+                    Heartbeat Verified (30 FPS Ingest)
+                  </div>
+                </div>
 
-            <div className="flex items-center space-x-2 font-mono text-[11px]">
-              <span className="text-slate-500 font-bold">VMS Vendor:</span>
-              <select
-                value={vendorFilter}
-                onChange={(e) => setVendorFilter(e.target.value)}
-                className="bg-slate-50 border border-slate-300 px-2.5 py-1 rounded-lg text-slate-800 font-bold outline-none cursor-pointer hover:bg-white shadow-xs"
-              >
-                <option value="ALL">All VMS Platforms (7 Vendors)</option>
-                <option value="Hikvision DarkFighter">Hikvision DarkFighter (ISAPI)</option>
-                <option value="CP Plus Intelli-Vision">CP Plus Intelli-Vision</option>
-                <option value="Milestone XProtect">Milestone XProtect (REST API)</option>
-                <option value="Genetec Omnicast">Genetec Omnicast</option>
-                <option value="Axis Q-Series">Axis Q-Series (ONVIF Profile T)</option>
-                <option value="Honeywell MAXPRO">Honeywell MAXPRO</option>
-                <option value="Dahua Starlight">Dahua Starlight</option>
-              </select>
+                {/* 2. Automated Tamper Watchdog */}
+                <div
+                  onClick={() => {
+                    setHealthFilter('TAMPERED');
+                    const tCam = cameras.find((c) => c.tamper_alert || c.health_status === 'TAMPERED_OCCLUDED');
+                    if (tCam) setSelectedTamperCam(tCam);
+                  }}
+                  className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                    healthFilter === 'TAMPERED'
+                      ? 'bg-amber-50 border-amber-300 ring-2 ring-amber-200'
+                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                    <span>TAMPER DETECTIONS</span>
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                  </div>
+                  <div className="text-lg font-black text-amber-900 font-mono mt-0.5 flex items-center space-x-2">
+                    <span>{healthSummary?.tampered_count ?? 2} Occluded Cams</span>
+                  </div>
+                  <div className="text-[10px] text-amber-800 font-mono font-medium mt-1 flex items-center space-x-1">
+                    <span>Lens Spray / Obstruction Flagged</span>
+                  </div>
+                </div>
+
+                {/* 3. Offline / Loss Watchdog */}
+                <div
+                  onClick={() => setHealthFilter('OFFLINE')}
+                  className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                    healthFilter === 'OFFLINE'
+                      ? 'bg-red-50 border-red-300 ring-2 ring-red-200'
+                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100/70'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                    <span>OFFLINE / SIGNAL LOSS</span>
+                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                  </div>
+                  <div className="text-lg font-black text-red-700 font-mono mt-0.5">
+                    {(healthSummary?.offline_count ?? 2) + (healthSummary?.video_loss_count ?? 1)} Dead Feeds
+                  </div>
+                  <div className="text-[10px] text-red-600 font-mono font-medium mt-1">
+                    Ping Timeout (&gt;60s) • Auto-Failover
+                  </div>
+                </div>
+
+                {/* 4. Bandwidth Savings Arithmetic */}
+                <div className="p-3 rounded-xl border border-slate-200 bg-slate-50">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                    <span>STATE WAN BANDWIDTH</span>
+                    <span className="text-[10px] font-bold text-[#1E3A8A] font-mono">500x SAVINGS</span>
+                  </div>
+                  <div className="text-lg font-black text-[#1E3A8A] font-mono mt-0.5">
+                    320 Mbps <span className="text-xs text-slate-400 font-normal">vs 160 Gbps</span>
+                  </div>
+                  <div className="text-[10px] text-slate-600 font-mono mt-1">
+                    Edge Metadata Triage (99.8% Saved)
+                  </div>
+                </div>
+              </div>
+
+              {/* Filter Ribbon: Health Quick-Filters + Vendor Selector */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100 text-xs">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-bold text-slate-700 font-mono text-[11px]">Audit Filter:</span>
+                  <button
+                    onClick={() => setHealthFilter('ALL')}
+                    className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer ${
+                      healthFilter === 'ALL'
+                        ? 'bg-[#1E3A8A] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    All Feeds ({cameras.length})
+                  </button>
+                  <button
+                    onClick={() => setHealthFilter('ONLINE')}
+                    className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                      healthFilter === 'ONLINE'
+                        ? 'bg-emerald-700 text-white shadow-xs'
+                        : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200'
+                    }`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span>Online ({cameras.filter((c) => c.health_status === 'ONLINE').length})</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setHealthFilter('TAMPERED');
+                      const tCam = cameras.find((c) => c.tamper_alert || c.health_status === 'TAMPERED_OCCLUDED');
+                      if (tCam) setSelectedTamperCam(tCam);
+                    }}
+                    className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                      healthFilter === 'TAMPERED'
+                        ? 'bg-amber-600 text-white shadow-xs'
+                        : 'bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-300'
+                    }`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    <span>Tampered ({cameras.filter((c) => c.health_status === 'TAMPERED_OCCLUDED' || c.tamper_alert).length})</span>
+                  </button>
+                  <button
+                    onClick={() => setHealthFilter('OFFLINE')}
+                    className={`px-3 py-1 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                      healthFilter === 'OFFLINE'
+                        ? 'bg-red-700 text-white shadow-xs'
+                        : 'bg-red-50 text-red-800 hover:bg-red-100 border border-red-200'
+                    }`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                    <span>Offline / Loss ({cameras.filter((c) => c.health_status === 'OFFLINE_TIMEOUT' || c.health_status === 'VIDEO_LOSS').length})</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center space-x-2 font-mono text-[11px]">
+                  <span className="text-slate-500 font-bold">VMS Vendor:</span>
+                  <select
+                    value={vendorFilter}
+                    onChange={(e) => setVendorFilter(e.target.value)}
+                    className="bg-slate-50 border border-slate-300 px-2.5 py-1 rounded-lg text-slate-800 font-bold outline-none cursor-pointer hover:bg-white shadow-xs"
+                  >
+                    <option value="ALL">All VMS Platforms (7 Vendors)</option>
+                    <option value="Hikvision DarkFighter">Hikvision DarkFighter (ISAPI)</option>
+                    <option value="CP Plus Intelli-Vision">CP Plus Intelli-Vision</option>
+                    <option value="Milestone XProtect">Milestone XProtect (REST API)</option>
+                    <option value="Genetec Omnicast">Genetec Omnicast</option>
+                    <option value="Axis Q-Series">Axis Q-Series (ONVIF Profile T)</option>
+                    <option value="Honeywell MAXPRO">Honeywell MAXPRO</option>
+                    <option value="Dahua Starlight">Dahua Starlight</option>
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -795,38 +888,66 @@ function CommandCenterInner() {
             </div>
 
             {/* Active Vehicle Pursuit Bar (Floating Top Overlay) */}
-            <div className="absolute top-14 inset-x-4 z-[400] bg-white/95 backdrop-blur-md border border-slate-200 rounded-xl p-3 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (searchedPlate.trim()) handleSearchPlate(searchedPlate.trim());
-                }}
-                className="flex items-center space-x-2 w-full sm:w-auto"
-              >
-                <div className="relative">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                  <input
-                    type="text"
-                    value={searchedPlate}
-                    onChange={(e) => setSearchedPlate(e.target.value.toUpperCase())}
-                    placeholder="Enter Registration (e.g. GJ05EF9012)"
-                    className="pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono font-bold text-slate-900 outline-none w-64 uppercase tracking-wider focus:bg-white focus:border-[#1E3A8A]"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="px-3.5 py-1.5 bg-[#1E3A8A] hover:bg-[#193073] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer"
+            <div className="absolute top-14 inset-x-4 z-[400] bg-white/95 backdrop-blur-md border border-slate-200 rounded-xl p-2.5 shadow-lg flex flex-col md:flex-row items-center justify-between gap-2.5">
+              <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (searchedPlate.trim()) handleSearchPlate(searchedPlate.trim());
+                  }}
+                  className="flex items-center space-x-2"
                 >
-                  Generate Trajectory
-                </button>
-              </form>
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <input
+                      type="text"
+                      value={searchedPlate}
+                      onChange={(e) => setSearchedPlate(e.target.value.toUpperCase())}
+                      placeholder="Enter Registration (e.g. GJ06XX9999)"
+                      className="pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono font-bold text-slate-900 outline-none w-56 uppercase tracking-wider focus:bg-white focus:border-[#1E3A8A]"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-3 py-1.5 bg-[#1E3A8A] hover:bg-[#193073] text-white font-bold text-xs rounded-lg shadow-sm transition-all cursor-pointer"
+                  >
+                    Plot Route
+                  </button>
+                </form>
+
+                {/* Quick 1-Click Target Registration Chips */}
+                <div className="hidden xl:flex items-center space-x-1.5 text-[10px] font-mono text-slate-500 pl-1">
+                  <span className="font-semibold">Quick Targets:</span>
+                  {[
+                    { plate: 'GJ06XX9999', label: 'Amber Alert' },
+                    { plate: 'GJ01AB1234', label: 'Robbery' },
+                    { plate: 'MH46T7527', label: 'Missing Taxi' },
+                  ].map((target) => (
+                    <button
+                      key={target.plate}
+                      type="button"
+                      onClick={() => {
+                        setSearchedPlate(target.plate);
+                        handleSearchPlate(target.plate);
+                      }}
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-2 py-1 rounded border border-slate-200 cursor-pointer transition-colors"
+                      title={target.label}
+                    >
+                      {target.plate}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               {/* Trajectory Stats Panel */}
               {trajectory.length > 0 && (
-                <div className="flex items-center space-x-3 text-xs font-mono text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
+                <div className="flex items-center space-x-2.5 text-xs font-mono text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 shrink-0">
                   <span>Waypoints: <strong className="text-slate-900">{trajectory.length} Checkpoints</strong></span>
-                  <span className="hidden md:inline">Target: <strong className="text-red-700">{searchedPlate}</strong></span>
-                  <span className="text-emerald-700 font-bold">Status: Real-time Vector Active</span>
+                  <span>Target: <strong className="text-red-700">{searchedPlate}</strong></span>
+                  <span className="text-emerald-700 font-bold flex items-center space-x-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Vector Active</span>
+                  </span>
                 </div>
               )}
             </div>
@@ -1011,10 +1132,7 @@ function CommandCenterInner() {
       )}
 
       {/* Official Government Footer */}
-      <footer className="py-3 px-8 bg-white border-t border-slate-200 text-center text-xs text-slate-500 font-mono flex flex-wrap items-center justify-between">
-        <span>SENTINEL GIS Tactical Command Center • Home Department, Government of Gujarat</span>
-        <span className="text-slate-400">Restricted Law Enforcement Network • Encrypted State VPN</span>
-      </footer>
+      <OfficialGovFooter />
     </div>
   );
 }

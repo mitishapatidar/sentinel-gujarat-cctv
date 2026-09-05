@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { OfficialGovBar } from '../../components/OfficialGovBar';
+import { OfficialGovFooter } from '../../components/OfficialGovFooter';
 import { Shield, Car, Building2, Landmark, Anchor, ArrowRight, CheckCircle2, Activity, Server, Cpu, HardDrive } from 'lucide-react';
 
 export default function DepartmentsPage() {
@@ -168,10 +169,8 @@ export default function DepartmentsPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-3 px-8 bg-white border-t border-slate-200 text-center text-xs text-slate-500 font-mono">
-        SENTINEL State GIS Gateway • Home Department, Government of Gujarat
-      </footer>
+      {/* Official Government Footer */}
+      <OfficialGovFooter />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { OfficialGovBar } from '../../components/OfficialGovBar';
+import { OfficialGovFooter } from '../../components/OfficialGovFooter';
 import { TACTICAL_CASES, TacticalCase } from '../../data/casesData';
 import { ShieldAlert, Crosshair, MapPin, Car, AlertOctagon, Search, FileBadge, ArrowRight, Radio } from 'lucide-react';
 
@@ -206,10 +207,8 @@ export default function CasesDirectoryPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-3 px-8 bg-white border-t border-slate-200 text-center text-xs text-slate-500 font-mono">
-        SENTINEL Criminal Pursuit Grid • Home Department, Government of Gujarat
-      </footer>
+      {/* Official Government Footer */}
+      <OfficialGovFooter />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { OfficialGovBar } from '../../components/OfficialGovBar';
+import { OfficialGovFooter } from '../../components/OfficialGovFooter';
 import { EdgeTriageMetrics } from '../../types';
 import { 
   Cpu, Server, HardDrive, Activity, AlertTriangle, CheckCircle2, 
@@ -504,10 +505,7 @@ function EdgeTriageInner() {
       </main>
 
       {/* Official Government Footer */}
-      <footer className="py-3 px-8 bg-white border-t border-slate-200 text-center text-xs text-slate-500 font-mono flex flex-wrap items-center justify-between">
-        <span>SENTINEL Edge Triage Architecture • Gujarat Police Innovation Challenge 2026</span>
-        <span className="text-slate-400">GSWAN Infrastructure Compliance Certified • High-Efficiency Distributed Edge</span>
-      </footer>
+      <OfficialGovFooter />
     </div>
   );
 }
