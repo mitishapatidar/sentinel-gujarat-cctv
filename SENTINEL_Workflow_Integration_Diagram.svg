@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <linearGradient id="tricolor2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="8" fill="url(#tricolor2)"/>
+
+  <!-- Header Banner -->
+  <rect x="60" y="35" width="1480" height="100" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow2)"/>
+  <text x="90" y="75" font-size="12" font-weight="bold" fill="#1E3A8A" letter-spacing="1.5">OPERATIONAL WORKFLOW &amp; INTER-AGENCY INTEGRATION</text>
+  <text x="90" y="112" font-size="26" font-weight="900" fill="#0F172A">SENTINEL — End-to-End Pursuit &amp; Interception Workflow</text>
+  <text x="1250" y="75" font-size="12" font-weight="bold" fill="#D97706" text-anchor="end">TEAM: RAJASTHAN WARRIORZ</text>
+  <text x="1510" y="105" font-size="12" font-family="monospace" fill="#64748B" text-anchor="end">Statewide Pursuit Sequence</text>
+
+  <!-- 5 CHRONOLOGICAL WORKFLOW STAGES -->
+
+  <!-- STAGE 1 -->
+  <g transform="translate(60, 160)">
+    <rect x="0" y="0" width="270" height="680" rx="16" fill="#FFFFFF" stroke="#3B82F6" stroke-width="2" filter="url(#shadow2)"/>
+    <rect x="0" y="0" width="270" height="50" rx="16" fill="#EFF6FF"/>
+    <rect x="0" y="35" width="270" height="15" fill="#EFF6FF"/>
+    <text x="15" y="32" font-size="13" font-weight="bold" fill="#1E3A8A">STAGE 1: INGESTION</text>
+
+    <g transform="translate(15, 70)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">1.1 Continuous Frame Grab</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">RTSP/MJPEG video buffer</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">30 FPS monotonic timestamps</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Multi-agency endpoints</text>
+    </g>
+
+    <g transform="translate(15, 185)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">1.2 Frame Resolution Scale</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Downsamples to 640x360</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Preserves aspect ratio</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Optimized for inference</text>
+    </g>
+
+    <g transform="translate(15, 300)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">1.3 Multi-Origin Sharding</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Distributes feeds across</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">localhost &amp; 127.0.0.1</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Bypasses browser limits</text>
+    </g>
+
+    <g transform="translate(15, 415)">
+      <rect x="0" y="0" width="240" height="240" rx="10" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#1E3A8A">Camera Nodes Active</text>
+      <text x="12" y="50" font-size="11" fill="#334155">• CAM-01: Overpass Corridor</text>
+      <text x="12" y="75" font-size="11" fill="#334155">• CAM-02: Pakwan Crossroads</text>
+      <text x="12" y="100" font-size="11" fill="#334155">• CAM-03: Ashram Rd Metro</text>
+      <text x="12" y="125" font-size="11" fill="#334155">• CAM-04: Vaishnodevi Circle</text>
+      <text x="12" y="160" font-size="11" font-weight="bold" fill="#059669">Scale: 52 Seed Cameras</text>
+      <text x="12" y="180" font-size="11" fill="#64748B">Ahmedabad, Gandhinagar,</text>
+      <text x="12" y="200" font-size="11" fill="#64748B">Surat, Vadodara, Rajkot</text>
+    </g>
+  </g>
+
+  <!-- STAGE 2 -->
+  <g transform="translate(360, 160)">
+    <rect x="0" y="0" width="270" height="680" rx="16" fill="#FFFFFF" stroke="#D97706" stroke-width="2" filter="url(#shadow2)"/>
+    <rect x="0" y="0" width="270" height="50" rx="16" fill="#FEF3C7"/>
+    <rect x="0" y="35" width="270" height="15" fill="#FEF3C7"/>
+    <text x="15" y="32" font-size="13" font-weight="bold" fill="#92400E">STAGE 2: AI ANPR</text>
+
+    <g transform="translate(15, 70)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">2.1 Vehicle Localization</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">YOLOv8 deep learning model</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Locates car, SUV, truck, bus</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Latency: 18ms</text>
+    </g>
+
+    <g transform="translate(15, 185)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">2.2 Plate BBox Crop</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Bilateral noise filter</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">CLAHE contrast equalizer</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Glare neutralization</text>
+    </g>
+
+    <g transform="translate(15, 300)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">2.3 State Code OCR</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Dual-pass OCR recognition</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Disambiguates 'O' vs '0'</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Plate: e.g. DA07CLX</text>
+    </g>
+
+    <g transform="translate(15, 415)">
+      <rect x="0" y="0" width="240" height="240" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="1"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#92400E">2.4 Hotlist Cross-Check</text>
+      <text x="12" y="50" font-size="11" fill="#334155">• Levenshtein fuzzy distance</text>
+      <text x="12" y="75" font-size="11" fill="#334155">• Matches eGujCop Hotlist</text>
+      <text x="12" y="100" font-size="11" fill="#334155">• Amber Alerts (GJ06XX9999)</text>
+      <text x="12" y="125" font-size="11" fill="#334155">• Stolen Cars (DA07CLX)</text>
+      <text x="12" y="150" font-size="11" fill="#334155">• Stolen Van (EY09VWS)</text>
+      <text x="12" y="175" font-size="11" fill="#334155">• Missing Taxi (MH46T7527)</text>
+      <text x="12" y="210" font-size="11" font-weight="bold" fill="#DC2626">IF MATCH &gt; 92%: RED ALERT</text>
+    </g>
+  </g>
+
+  <!-- STAGE 3 -->
+  <g transform="translate(660, 160)">
+    <rect x="0" y="0" width="270" height="680" rx="16" fill="#FFFFFF" stroke="#EF4444" stroke-width="2" filter="url(#shadow2)"/>
+    <rect x="0" y="0" width="270" height="50" rx="16" fill="#FEE2E2"/>
+    <rect x="0" y="35" width="270" height="15" fill="#FEE2E2"/>
+    <text x="15" y="32" font-size="13" font-weight="bold" fill="#991B1B">STAGE 3: ALERT PUSH</text>
+
+    <g transform="translate(15, 70)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">3.1 WebSocket Broadcast</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Payload contains: plate,</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">camera_id, model, crime</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Pushed in &lt;10ms</text>
+    </g>
+
+    <g transform="translate(15, 185)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">3.2 Video Wall Overlay</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Red pulsing HOTLIST HIT tag</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Real-time alert chime sound</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#DC2626">Operator notified</text>
+    </g>
+
+    <g transform="translate(15, 300)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">3.3 Incident Queue Update</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Appends to Real-Time Feed</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Displays Match Percentage</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Audit trail logged</text>
+    </g>
+
+    <g transform="translate(15, 415)">
+      <rect x="0" y="0" width="240" height="240" rx="10" fill="#FEE2E2" stroke="#EF4444" stroke-width="1"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#991B1B">Alert Priority Levels</text>
+      <text x="12" y="50" font-size="11" font-weight="bold" fill="#DC2626">• CRITICAL AMBER ALERT:</text>
+      <text x="24" y="70" font-size="10.5" fill="#334155">Kidnappings, Armed Robbery</text>
+      <text x="12" y="95" font-size="11" font-weight="bold" fill="#D97706">• HIGH ALERT:</text>
+      <text x="24" y="115" font-size="10.5" fill="#334155">Fatal Hit-and-Run, Stolen Van</text>
+      <text x="12" y="140" font-size="11" font-weight="bold" fill="#2563EB">• MEDIUM ALERT:</text>
+      <text x="24" y="160" font-size="10.5" fill="#334155">Commercial Smuggling</text>
+      <text x="12" y="200" font-size="10.5" font-family="monospace" fill="#0F172A">Automatic Priority Sorting</text>
+    </g>
+  </g>
+
+  <!-- STAGE 4 -->
+  <g transform="translate(960, 160)">
+    <rect x="0" y="0" width="270" height="680" rx="16" fill="#FFFFFF" stroke="#059669" stroke-width="2" filter="url(#shadow2)"/>
+    <rect x="0" y="0" width="270" height="50" rx="16" fill="#ECFDF5"/>
+    <rect x="0" y="35" width="270" height="15" fill="#ECFDF5"/>
+    <text x="15" y="32" font-size="13" font-weight="bold" fill="#065F46">STAGE 4: GIS TRAJECTORY</text>
+
+    <g transform="translate(15, 70)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">4.1 Sighting Correlation</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Queries detection history</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Sorts points chronologically</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Eliminates false zigzags</text>
+    </g>
+
+    <g transform="translate(15, 185)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">4.2 Vector Rebuilding</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Draws route on Gujarat map</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Numbered checkpoint pins</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">OpenStreetMap layer</text>
+    </g>
+
+    <g transform="translate(15, 300)">
+      <rect x="0" y="0" width="240" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">4.3 Velocity Calculation</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">Distance / Time difference</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">Calculates speed (e.g. 74 km/h)</text>
+      <text x="12" y="85" font-size="10" font-family="monospace" fill="#059669">Detects escape speedup</text>
+    </g>
+
+    <g transform="translate(15, 415)">
+      <rect x="0" y="0" width="240" height="240" rx="10" fill="#ECFDF5" stroke="#059669" stroke-width="1"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#065F46">4.4 Downstream Projection</text>
+      <text x="12" y="50" font-size="11" fill="#334155">• Identifies next toll naka</text>
+      <text x="12" y="75" font-size="11" fill="#334155">• Projects Arrival ETA</text>
+      <text x="12" y="100" font-size="11" font-weight="bold" fill="#D97706">• "CH-0 Toll Naka (ETA 6m)"</text>
+      <text x="12" y="125" font-size="11" font-weight="bold" fill="#1E3A8A">• "Chharodi Toll NH-48"</text>
+      <text x="12" y="150" font-size="11" font-weight="bold" fill="#059669">• "Golden Toll Vadodara"</text>
+      <text x="12" y="185" font-size="11" fill="#334155">Enables pre-emptive cordons</text>
+      <text x="12" y="210" font-size="10" font-family="monospace" fill="#059669">Predictive Interception</text>
+    </g>
+  </g>
+
+  <!-- STAGE 5 -->
+  <g transform="translate(1260, 160)">
+    <rect x="0" y="0" width="280" height="680" rx="16" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2" filter="url(#shadow2)"/>
+    <rect x="0" y="0" width="280" height="50" rx="16" fill="#EFF6FF"/>
+    <rect x="0" y="35" width="280" height="15" fill="#EFF6FF"/>
+    <text x="15" y="32" font-size="13" font-weight="bold" fill="#1E3A8A">STAGE 5: INTERDICTION</text>
+
+    <g transform="translate(15, 70)">
+      <rect x="0" y="0" width="250" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">5.1 Dispatch PCR Patrol</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">• 1-click police dispatch</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">• Broadcasts vector to PCR-08</text>
+      <text x="12" y="85" font-size="10.5" fill="#64748B">• Mobilizes SG Highway unit</text>
+      <text x="12" y="105" font-size="10" font-family="monospace" fill="#059669">Status: DEPLOYED</text>
+    </g>
+
+    <g transform="translate(15, 205)">
+      <rect x="0" y="0" width="250" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">5.2 Toll Barricade Lock</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">• Remote FASTag toll signal</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">• Electronic boom barrier locks</text>
+      <text x="12" y="85" font-size="10.5" fill="#64748B">• Traps vehicle before exit</text>
+      <text x="12" y="105" font-size="10" font-family="monospace" fill="#DC2626">FASTag Naka Locked</text>
+    </g>
+
+    <g transform="translate(15, 340)">
+      <rect x="0" y="0" width="250" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#0F172A">5.3 Digital Legal Dossier</text>
+      <text x="12" y="45" font-size="10.5" fill="#64748B">• Certified PDF evidence export</text>
+      <text x="12" y="65" font-size="10.5" fill="#64748B">• GPS coordinates &amp; timestamps</text>
+      <text x="12" y="85" font-size="10.5" fill="#64748B">• Officer badge ID watermark</text>
+      <text x="12" y="105" font-size="10" font-family="monospace" fill="#059669">Courtroom Admissible</text>
+    </g>
+
+    <g transform="translate(15, 475)">
+      <rect x="0" y="0" width="250" height="180" rx="10" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="1"/>
+      <text x="12" y="25" font-size="12" font-weight="bold" fill="#1E3A8A">5.4 Closed-Loop Resolution</text>
+      <text x="12" y="50" font-size="11" fill="#334155">• Suspect vehicle intercepted</text>
+      <text x="12" y="75" font-size="11" fill="#334155">• eGujCop FIR status updated</text>
+      <text x="12" y="100" font-size="11" fill="#334155">• Hotlist vehicle removed</text>
+      <text x="12" y="125" font-size="11" fill="#334155">• SCRB crime statistics logged</text>
+      <text x="12" y="155" font-size="11" font-weight="bold" fill="#059669">CASE CLOSED SUCCESSFULLY</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrows between stages -->
+  <path d="M 330 500 L 360 500" stroke="#1E3A8A" stroke-width="3" fill="none"/>
+  <path d="M 630 500 L 660 500" stroke="#1E3A8A" stroke-width="3" fill="none"/>
+  <path d="M 930 500 L 960 500" stroke="#1E3A8A" stroke-width="3" fill="none"/>
+  <path d="M 1230 500 L 1260 500" stroke="#1E3A8A" stroke-width="3" fill="none"/>
+
+  <!-- Footer Banner -->
+  <rect x="60" y="865" width="1480" height="85" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="90" y="900" font-size="13" font-weight="bold" fill="#0F172A">END-TO-END LATENCY GUARANTEE</text>
+  <text x="90" y="928" font-size="12" fill="#475569">
+    • Camera Ingestion to ANPR Lock: <tspan font-weight="bold" fill="#059669">&lt;35ms</tspan>  ➔  
+    • WebSocket Push to Command Wall: <tspan font-weight="bold" fill="#1E3A8A">&lt;10ms</tspan>  ➔  
+    • Spatial Trajectory &amp; ETA Calculation: <tspan font-weight="bold" fill="#D97706">&lt;50ms</tspan>  ➔  
+    • Total Time from Sighting to Barricade Action: <tspan font-weight="bold" fill="#DC2626">&lt;2 Seconds</tspan>
+  </text>
+  <text x="1510" y="915" font-size="11" font-family="monospace" fill="#64748B" text-anchor="end">SENTINEL • Gujarat Police Inter-Agency Workflow Diagram</text>
+</svg>

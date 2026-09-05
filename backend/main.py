@@ -453,34 +453,45 @@ def get_camera_snapshot(camera_id: int, db: Session = Depends(get_db)):
 
 
 VIDEO_FEEDS = {
-    1: "videos/cam_1_iscon.mp4",
-    2: "videos/cam_2_pakwan.mp4",
-    3: "videos/cam_3_incometax.mp4",
-    4: "videos/cam_4_vaishnodevi.mp4",
+    1: "videos/yt_cam_1.mp4",
+    2: "videos/yt_cam_2.mp4",
+    3: "videos/yt_cam_3.mp4",
+    4: "videos/yt_cam_4.mp4",
 }
 
 @app.get("/api/stream/{feed_id}")
-def stream_cctv_feed(feed_id: int):
+async def stream_cctv_feed(feed_id: int, request: Request):
     """
     Continuous 30 FPS MJPEG surveillance stream for browser video wall.
-    Loops seamlessly so judges see an active, uninterrupted live camera feed.
+    Streams the downloaded YouTube CCTV feeds with automatic seamless looping.
     """
-    rel_path = VIDEO_FEEDS.get(feed_id, "videos/cam_1_iscon.mp4")
+    rel_path = VIDEO_FEEDS.get(feed_id, "videos/yt_cam_1.mp4")
     video_path = os.path.join(os.path.dirname(__file__), rel_path)
     if not os.path.exists(video_path):
         video_path = os.path.join(os.getcwd(), rel_path)
 
-    def iter_frames():
-        while True:
-            cap = cv2.VideoCapture(video_path)
-            while cap.isOpened():
+    async def iter_frames():
+        cap = cv2.VideoCapture(video_path)
+        try:
+            while True:
+                if await request.is_disconnected():
+                    break
                 ret, frame = cap.read()
                 if not ret:
-                    break
+                    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                    ret, frame = cap.read()
+                    if not ret:
+                        break
+                h, w = frame.shape[:2]
+                if w > 640 or h > 360:
+                    frame = cv2.resize(frame, (640, 360))
                 _, buffer = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), 75])
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
-                time.sleep(1.0 / 30.0)
+                await asyncio.sleep(0.033)
+        except (asyncio.CancelledError, GeneratorExit):
+            pass
+        finally:
             cap.release()
 
     return StreamingResponse(iter_frames(), media_type="multipart/x-mixed-replace; boundary=frame")
@@ -550,6 +561,10 @@ async def periodic_simulation_loop():
                         "GJ06XX9999": [19, 2, 8, 7, 29],
                         "GJ27CD5678": [6, 10, 16],
                         "GJ05EF9012": [40, 41, 42],
+                        "DA07CLX": [2, 1, 7],
+                        "EY09VWS": [1, 2, 8],
+                        "MH46T7527": [3, 4, 14],
+                        "MH04EE1980": [7, 8, 2],
                     }
 
                     # 35% chance of generating a hotlist vehicle sighting along its corridor

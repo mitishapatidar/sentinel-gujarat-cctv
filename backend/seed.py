@@ -111,6 +111,38 @@ def seed_database():
                 "crime_type": "Kidnapping Suspect",
                 "alert_level": "Critical",
                 "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=2)
+            },
+            {
+                "id": 5,
+                "plate_number": "DA07CLX",
+                "vehicle_model": "Silver Mazda 3 Sedan",
+                "crime_type": "Stolen / Lost Vehicle",
+                "alert_level": "Critical",
+                "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=6)
+            },
+            {
+                "id": 6,
+                "plate_number": "EY09VWS",
+                "vehicle_model": "Silver Nissan Primastar Van",
+                "crime_type": "Stolen Cargo Delivery Van",
+                "alert_level": "High",
+                "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=10)
+            },
+            {
+                "id": 7,
+                "plate_number": "MH46T7527",
+                "vehicle_model": "White Maruti Ertiga VXi",
+                "crime_type": "Missing / Lost Taxi (Inter-State)",
+                "alert_level": "High",
+                "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=1)
+            },
+            {
+                "id": 8,
+                "plate_number": "MH04EE1980",
+                "vehicle_model": "Red Hatchback",
+                "crime_type": "Hit-and-Run Suspect",
+                "alert_level": "Critical",
+                "flagged_date": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=5)
             }
         ]
 
@@ -144,6 +176,24 @@ def seed_database():
             {"camera_id": 40, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=60), "is_alert": True, "confidence": 0.92, "matched_watchlist_id": 3},
             {"camera_id": 41, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=35), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 3},
             {"camera_id": 42, "plate_number": "GJ05EF9012", "timestamp": now - datetime.timedelta(minutes=12), "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 3},
+
+            # 5. DA07CLX (YouTube Cam 2: Stolen Silver Mazda on SG Highway)
+            {"camera_id": 1,  "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=32), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 5},
+            {"camera_id": 2,  "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=14), "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 5},
+            {"camera_id": 7,  "plate_number": "DA07CLX", "timestamp": now - datetime.timedelta(minutes=4),  "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 5},
+
+            # 6. EY09VWS (YouTube Cam 2: Stolen Nissan Delivery Van)
+            {"camera_id": 1,  "plate_number": "EY09VWS", "timestamp": now - datetime.timedelta(minutes=24), "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 6},
+            {"camera_id": 8,  "plate_number": "EY09VWS", "timestamp": now - datetime.timedelta(minutes=7),  "is_alert": True, "confidence": 0.97, "matched_watchlist_id": 6},
+
+            # 7. MH46T7527 (YouTube Cam 3: Missing Inter-State Ertiga Taxi)
+            {"camera_id": 3,  "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=40), "is_alert": True, "confidence": 0.94, "matched_watchlist_id": 7},
+            {"camera_id": 14, "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=18), "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 7},
+            {"camera_id": 4,  "plate_number": "MH46T7527", "timestamp": now - datetime.timedelta(minutes=5),  "is_alert": True, "confidence": 0.98, "matched_watchlist_id": 7},
+
+            # 8. MH04EE1980 (YouTube Cam 3: Red Hatchback Hit-and-Run)
+            {"camera_id": 7,  "plate_number": "MH04EE1980", "timestamp": now - datetime.timedelta(minutes=22), "is_alert": True, "confidence": 0.95, "matched_watchlist_id": 8},
+            {"camera_id": 2,  "plate_number": "MH04EE1980", "timestamp": now - datetime.timedelta(minutes=9),  "is_alert": True, "confidence": 0.96, "matched_watchlist_id": 8},
         ]
 
         for det in detections_data:

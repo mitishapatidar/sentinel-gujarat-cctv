@@ -1,0 +1,230 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <linearGradient id="nav-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="tricolor" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tricolor Ribbon -->
+  <rect x="0" y="0" width="1600" height="8" fill="url(#tricolor)"/>
+
+  <!-- Top Title Banner -->
+  <rect x="60" y="35" width="1480" height="100" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="90" y="75" font-size="12" font-weight="bold" fill="#1E3A8A" letter-spacing="1.5">OFFICIAL SUBMISSION • HOME DEPARTMENT • GUJARAT POLICE</text>
+  <text x="90" y="112" font-size="26" font-weight="900" fill="#0F172A">SENTINEL — High-Level Design & System Architecture</text>
+  <text x="1250" y="75" font-size="12" font-weight="bold" fill="#D97706" text-anchor="end">TEAM: RAJASTHAN WARRIORZ</text>
+  <text x="1510" y="105" font-size="12" font-family="monospace" fill="#64748B" text-anchor="end">Sagar Patidar (TL) • Mitisha • Nidhi • Himanshu • Manav</text>
+
+  <!-- 4 HORIZONTAL ARCHITECTURE TIERS -->
+
+  <!-- TIER 1: HETEROGENEOUS INGESTION LAYER -->
+  <g transform="translate(60, 160)">
+    <rect x="0" y="0" width="340" height="680" rx="16" fill="#FFFFFF" stroke="#3B82F6" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="340" height="50" rx="16" fill="#EFF6FF"/>
+    <rect x="0" y="35" width="340" height="15" fill="#EFF6FF"/>
+    <text x="20" y="32" font-size="15" font-weight="bold" fill="#1E3A8A">1. HETEROGENEOUS INGESTION</text>
+
+    <!-- Source Boxes -->
+    <g transform="translate(20, 70)">
+      <rect x="0" y="0" width="300" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Gujarat State Police</text>
+      <text x="15" y="50" font-size="11" font-weight="bold" fill="#2563EB">28,400 CCTV Nodes</text>
+      <text x="15" y="72" font-size="11" fill="#64748B">RTSP H.264/H.265 (Port 8554)</text>
+      <text x="15" y="88" font-size="10" font-family="monospace" fill="#059669">Monotonic PTS • 30 FPS</text>
+    </g>
+
+    <g transform="translate(20, 190)">
+      <rect x="0" y="0" width="300" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Traffic & RTO Department</text>
+      <text x="15" y="50" font-size="11" font-weight="bold" fill="#D97706">19,200 Highway Nakas</text>
+      <text x="15" y="72" font-size="11" fill="#64748B">WebRTC WHEP (Port 8889)</text>
+      <text x="15" y="88" font-size="10" font-family="monospace" fill="#059669">Ultra Low-Latency Ingress</text>
+    </g>
+
+    <g transform="translate(20, 310)">
+      <rect x="0" y="0" width="300" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Civil Supplies & Smart Cities</text>
+      <text x="15" y="50" font-size="11" font-weight="bold" fill="#059669">12,100 Warehouse Cams</text>
+      <text x="15" y="72" font-size="11" fill="#64748B">HLS HTTP Streams / ONVIF</text>
+      <text x="15" y="88" font-size="10" font-family="monospace" fill="#059669">Statewide Ingestion Proxy</text>
+    </g>
+
+    <g transform="translate(20, 430)">
+      <rect x="0" y="0" width="300" height="100" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Simulated YouTube CCTV Grid</text>
+      <text x="15" y="50" font-size="11" font-weight="bold" fill="#7C3AED">4 Live Highway Feeds (Test)</text>
+      <text x="15" y="72" font-size="11" fill="#64748B">SG Highway, Pakwan, Ashram Rd</text>
+      <text x="15" y="88" font-size="10" font-family="monospace" fill="#059669">30 FPS Continuous Loop</text>
+    </g>
+
+    <g transform="translate(20, 550)">
+      <rect x="0" y="0" width="300" height="105" rx="10" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1"/>
+      <text x="15" y="25" font-size="12" font-weight="bold" fill="#1E3A8A">Protocol Ingestion Gateway</text>
+      <text x="15" y="45" font-size="11" fill="#334155">• Unified OpenCV Frame Buffer</text>
+      <text x="15" y="65" font-size="11" fill="#334155">• Frame Resizer (640x360)</text>
+      <text x="15" y="85" font-size="11" fill="#334155">• Monotonic Timestamp Sync</text>
+    </g>
+  </g>
+
+  <!-- TIER 2: AI ANPR & VISION PIPELINE -->
+  <g transform="translate(440, 160)">
+    <rect x="0" y="0" width="340" height="680" rx="16" fill="#FFFFFF" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="340" height="50" rx="16" fill="#FEF3C7"/>
+    <rect x="0" y="35" width="340" height="15" fill="#FEF3C7"/>
+    <text x="20" y="32" font-size="15" font-weight="bold" fill="#92400E">2. AI ANPR & VISION ENGINE</text>
+
+    <!-- Blocks -->
+    <g transform="translate(20, 70)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">YOLOv8 Plate Localization</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• Deep learning vehicle detection</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• License plate bounding box crop</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Execution latency: &lt;18ms</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">98.4% Precision on Indian Plates</text>
+    </g>
+
+    <g transform="translate(20, 210)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Adaptive Image Preprocessor</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• Bilateral noise filtering</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• CLAHE contrast enhancement</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Night glare compensation</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#D97706">Indian Mud/Dust Resistance</text>
+    </g>
+
+    <g transform="translate(20, 350)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">OCR & State Disambiguation</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• Dual-pass OCR character extraction</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• Rule-based 'O' vs '0' normalizer</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Indian State code parser (GJ, MH)</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">Syntax Validation Engine</text>
+    </g>
+
+    <g transform="translate(20, 490)">
+      <rect x="0" y="0" width="300" height="165" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="1"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#92400E">Fuzzy Levenshtein Hotlist Matcher</text>
+      <text x="15" y="52" font-size="11" fill="#334155">• Distance matrix calculation against DB</text>
+      <text x="15" y="74" font-size="11" fill="#334155">• Tolerates occluded / missing characters</text>
+      <text x="15" y="96" font-size="11" fill="#334155">• Similarity score threshold: &gt;92%</text>
+      <text x="15" y="118" font-size="11" font-weight="bold" fill="#DC2626">• Triggers Siren &amp; WebSocket Alert</text>
+      <text x="15" y="145" font-size="10" font-family="monospace" fill="#1E3A8A">Total Inference Time: &lt;48ms</text>
+    </g>
+  </g>
+
+  <!-- TIER 3: BACKEND & CORE SERVICES -->
+  <g transform="translate(820, 160)">
+    <rect x="0" y="0" width="340" height="680" rx="16" fill="#FFFFFF" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="340" height="50" rx="16" fill="#ECFDF5"/>
+    <rect x="0" y="35" width="340" height="15" fill="#ECFDF5"/>
+    <text x="20" y="32" font-size="15" font-weight="bold" fill="#065F46">3. CORE SERVICES &amp; API</text>
+
+    <g transform="translate(20, 70)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">FastAPI Microservices</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• /api/cameras (Statewide nodes)</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• /api/watchlist (Hotlist registry)</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• /api/track/{plate} (Vector points)</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">Uvicorn Asynchronous Engine</text>
+    </g>
+
+    <g transform="translate(20, 210)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">WebSocket Pub/Sub Manager</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• /ws/alerts bidirectional channel</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• Instant push of Red-Alert triggers</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Heartbeat &amp; auto-reconnect logic</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">&lt;10ms Propagation Latency</text>
+    </g>
+
+    <g transform="translate(20, 350)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Multi-Origin Socket Sharder</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• Shards streams across loopback hosts</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• localhost:8000 &amp; 127.0.0.1:8000</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Bypasses Chrome 6-connection limit</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">Zero-Queueing 30 FPS Streams</text>
+    </g>
+
+    <g transform="translate(20, 490)">
+      <rect x="0" y="0" width="300" height="165" rx="10" fill="#ECFDF5" stroke="#059669" stroke-width="1"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#065F46">State Database &amp; GIS Analytics</text>
+      <text x="15" y="52" font-size="11" fill="#334155">• SQLite / PostgreSQL relational schema</text>
+      <text x="15" y="74" font-size="11" fill="#334155">• 52 seed cameras across 6 jurisdictions</text>
+      <text x="15" y="96" font-size="11" fill="#334155">• Velocity &amp; Corridor ETA calculator</text>
+      <text x="15" y="118" font-size="11" fill="#334155">• eGujCop &amp; SCRB sync connector</text>
+      <text x="15" y="145" font-size="10" font-family="monospace" fill="#1E3A8A">ACID Compliant • Spatial Index</text>
+    </g>
+  </g>
+
+  <!-- TIER 4: TACTICAL FRONTEND & INTERVENTIONS -->
+  <g transform="translate(1200, 160)">
+    <rect x="0" y="0" width="340" height="680" rx="16" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="340" height="50" rx="16" fill="#EFF6FF"/>
+    <rect x="0" y="35" width="340" height="15" fill="#EFF6FF"/>
+    <text x="20" y="32" font-size="15" font-weight="bold" fill="#1E3A8A">4. TACTICAL COMMAND UI</text>
+
+    <g transform="translate(20, 70)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Live 2x2 CCTV Video Wall</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• 4 simultaneous 30-FPS MJPEG feeds</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• Real-time HOTLIST HIT badges</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Automatic video seamless looping</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">Pure Hardware GPU Accelerated</text>
+    </g>
+
+    <g transform="translate(20, 210)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Sovereign Gujarat GIS Map</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• OpenStreetMap Gujarat vector tiles</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• Linear historical route trajectories</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• Zero watermarks / Zero external APIs</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#059669">100% On-Premise Sovereign</text>
+    </g>
+
+    <g transform="translate(20, 350)">
+      <rect x="0" y="0" width="300" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#0F172A">Real-time Alert Feed</text>
+      <text x="15" y="50" font-size="11" fill="#64748B">• Instant vehicle match cards</text>
+      <text x="15" y="70" font-size="11" fill="#64748B">• Sighted camera, speed &amp; confidence</text>
+      <text x="15" y="90" font-size="11" fill="#64748B">• 1-click "Track &amp; Reconstruct"</text>
+      <text x="15" y="108" font-size="10" font-family="monospace" fill="#DC2626">Live Red-Alert Auditory Siren</text>
+    </g>
+
+    <g transform="translate(20, 490)">
+      <rect x="0" y="0" width="300" height="165" rx="10" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="1"/>
+      <text x="15" y="28" font-size="13" font-weight="bold" fill="#1E3A8A">Tactical Enforcement Dock</text>
+      <text x="15" y="52" font-size="11" fill="#334155">• Dispatch Mobile Patrol (PCR-08)</text>
+      <text x="15" y="74" font-size="11" fill="#334155">• Remote FASTag Toll Barricade Lock</text>
+      <text x="15" y="96" font-size="11" fill="#334155">• Export Certified Legal Dossier (PDF)</text>
+      <text x="15" y="118" font-size="11" fill="#334155">• eGujCop Case Registry Directory</text>
+      <text x="15" y="145" font-size="10" font-family="monospace" fill="#059669">Closed-Loop Law Enforcement</text>
+    </g>
+  </g>
+
+  <!-- Flow Connectors (Horizontal Arrows) -->
+  <path d="M 400 500 L 440 500" stroke="#1E3A8A" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 780 500 L 820 500" stroke="#1E3A8A" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 1160 500 L 1200 500" stroke="#1E3A8A" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Footer Info Banner -->
+  <rect x="60" y="865" width="1480" height="85" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="90" y="900" font-size="13" font-weight="bold" fill="#0F172A">KEY PERFORMANCE INDICATORS</text>
+  <text x="90" y="928" font-size="12" fill="#475569">
+    • Inference Latency: <tspan font-weight="bold" fill="#059669">&lt;50ms</tspan>  |  
+    • Video Throughput: <tspan font-weight="bold" fill="#1E3A8A">30 FPS continuous</tspan>  |  
+    • Match Precision: <tspan font-weight="bold" fill="#D97706">&gt;98.4%</tspan>  |  
+    • Network Capacity: <tspan font-weight="bold" fill="#1E3A8A">80,000+ CCTV Nodes</tspan>  |  
+    • Security: <tspan font-weight="bold" fill="#059669">Role-Based 2FA &amp; Self-Hosted GIS</tspan>
+  </text>
+  <text x="1510" y="915" font-size="11" font-family="monospace" fill="#64748B" text-anchor="end">SENTINEL v2.0 • Gujarat Police High-Level Architecture</text>
+</svg>

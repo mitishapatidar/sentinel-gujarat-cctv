@@ -22,6 +22,12 @@ const DynamicLightGujaratMap = dynamic(() => import('../../components/LightGujar
 const API_BASE = 'http://localhost:8000';
 const WS_BASE = 'ws://localhost:8000';
 
+// Shard stream endpoints across localhost and 127.0.0.1 to prevent Chrome's 6-socket HTTP/1.1 bottleneck
+const getStreamUrl = (feedId: number) => {
+  const host = feedId <= 2 ? 'http://localhost:8000' : 'http://127.0.0.1:8000';
+  return `${host}/api/stream/${feedId}`;
+};
+
 function CommandCenterInner() {
   const searchParams = useSearchParams();
   const caseIdFromUrl = searchParams.get('caseId');
@@ -47,6 +53,66 @@ function CommandCenterInner() {
   // Initial mock seeded alerts for instant high-visibility demonstration
   const defaultAlerts: Alert[] = [
     {
+      id: 105,
+      camera_id: 2,
+      camera_name: 'SG Highway - Pakwan Cross Road',
+      department: 'Police',
+      lat: 23.0396,
+      lng: 72.5126,
+      plate_number: 'DA07CLX',
+      timestamp: new Date(Date.now() - 3 * 60000).toISOString(),
+      confidence: 0.98,
+      crime_type: 'Stolen / Lost Mazda Sedan',
+      vehicle_model: 'Silver Mazda 3',
+      alert_level: 'Critical',
+      similarity: 0.98,
+    },
+    {
+      id: 106,
+      camera_id: 8,
+      camera_name: 'SG Highway - Gota Flyover',
+      department: 'Police',
+      lat: 23.0988,
+      lng: 72.5312,
+      plate_number: 'EY09VWS',
+      timestamp: new Date(Date.now() - 7 * 60000).toISOString(),
+      confidence: 0.97,
+      crime_type: 'Stolen Cargo Delivery Van',
+      vehicle_model: 'Silver Nissan Primastar',
+      alert_level: 'High',
+      similarity: 0.96,
+    },
+    {
+      id: 107,
+      camera_id: 4,
+      camera_name: 'Kalupur Railway Station Circle',
+      department: 'Police',
+      lat: 23.0232,
+      lng: 72.5997,
+      plate_number: 'MH46T7527',
+      timestamp: new Date(Date.now() - 12 * 60000).toISOString(),
+      confidence: 0.96,
+      crime_type: 'Missing / Lost Taxi (Inter-State)',
+      vehicle_model: 'White Maruti Ertiga',
+      alert_level: 'High',
+      similarity: 0.95,
+    },
+    {
+      id: 108,
+      camera_id: 2,
+      camera_name: 'SG Highway - Pakwan Cross Road',
+      department: 'Police',
+      lat: 23.0396,
+      lng: 72.5126,
+      plate_number: 'MH04EE1980',
+      timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
+      confidence: 0.97,
+      crime_type: 'Hit-and-Run Suspect',
+      vehicle_model: 'Red Hyundai i20',
+      alert_level: 'Critical',
+      similarity: 0.97,
+    },
+    {
       id: 101,
       camera_id: 19,
       camera_name: 'Vastrapur Lake Junction',
@@ -54,7 +120,7 @@ function CommandCenterInner() {
       lat: 23.0367,
       lng: 72.5305,
       plate_number: 'GJ06XX9999',
-      timestamp: new Date(Date.now() - 4 * 60000).toISOString(),
+      timestamp: new Date(Date.now() - 20 * 60000).toISOString(),
       confidence: 0.98,
       crime_type: 'AMBER ALERT: Kidnapping Suspect',
       vehicle_model: 'Red Hyundai Creta',
@@ -69,42 +135,12 @@ function CommandCenterInner() {
       lat: 23.0396,
       lng: 72.5126,
       plate_number: 'GJ01AB1234',
-      timestamp: new Date(Date.now() - 18 * 60000).toISOString(),
+      timestamp: new Date(Date.now() - 35 * 60000).toISOString(),
       confidence: 0.96,
       crime_type: 'Armed Robbery Getaway',
       vehicle_model: 'White Maruti Swift',
       alert_level: 'Critical',
       similarity: 0.95,
-    },
-    {
-      id: 103,
-      camera_id: 6,
-      camera_name: 'Narol Circle - Industrial Hub',
-      department: 'RTO',
-      lat: 22.9734,
-      lng: 72.5925,
-      plate_number: 'GJ27CD5678',
-      timestamp: new Date(Date.now() - 35 * 60000).toISOString(),
-      confidence: 0.94,
-      crime_type: 'Fatal Hit-and-Run Investigation',
-      vehicle_model: 'Black Scorpio-N',
-      alert_level: 'High',
-      similarity: 0.92,
-    },
-    {
-      id: 104,
-      camera_id: 42,
-      camera_name: 'Surat - Kamrej Toll Plaza NH-48',
-      department: 'RTO',
-      lat: 21.2712,
-      lng: 72.9645,
-      plate_number: 'GJ05EF9012',
-      timestamp: new Date(Date.now() - 50 * 60000).toISOString(),
-      confidence: 0.95,
-      crime_type: 'Stolen Luxury SUV / Contraband',
-      vehicle_model: 'Silver Toyota Fortuner',
-      alert_level: 'High',
-      similarity: 0.94,
     },
   ];
 
@@ -351,10 +387,10 @@ function CommandCenterInner() {
             {/* 2x2 Clean Video Feeds */}
             <div className="grid grid-cols-2 gap-2.5">
               {[
-                { id: 1, name: 'SG Highway - ISCON Cross Road', tag: 'POLICE', plate: 'GJ01TR9876', alert: false },
-                { id: 2, name: 'SG Highway - Pakwan Cross Road', tag: 'POLICE', plate: 'GJ06XX9999', alert: true },
-                { id: 3, name: 'Ashram Road - Income Tax Circle', tag: 'RTO', plate: 'GJ01AB1234', alert: false },
-                { id: 4, name: 'SP Ring Road - Vaishnodevi Circle', tag: 'POLICE', plate: 'GJ06XX9999', alert: true },
+                { id: 1, name: 'SG Highway - Overpass (CAM-01)', tag: 'POLICE', plate: 'DA07CLX', alert: true },
+                { id: 2, name: 'SG Highway - Pakwan Cross (CAM-02)', tag: 'POLICE', plate: 'EY09VWS', alert: true },
+                { id: 3, name: 'Ashram Road - Metro Flyover (CAM-03)', tag: 'RTO', plate: 'MH46T7527', alert: true },
+                { id: 4, name: 'SP Ring Road - Vaishnodevi (CAM-04)', tag: 'POLICE', plate: 'MH04EE1980', alert: true },
               ].map((feed) => (
                 <div
                   key={feed.id}
@@ -364,12 +400,10 @@ function CommandCenterInner() {
                 >
                   {/* Real Live MJPEG Surveillance Video Feed */}
                   <img
-                    src={`${API_BASE}/api/stream/${feed.id}`}
+                    src={getStreamUrl(feed.id)}
                     alt={feed.name}
                     className="absolute inset-0 w-full h-full object-cover z-0"
-                    onError={(e) => {
-                      e.currentTarget.style.opacity = '0';
-                    }}
+                    loading="eager"
                   />
 
                   {/* Top Bar */}
